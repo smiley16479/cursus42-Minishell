@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:49 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/08 02:41:58 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 01:09:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include.h"
 
 /*
 **Ferme stdin et le remplace par le contenu du fichier après le "<"

@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 20:58:02 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 16:20:19 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 01:09:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <include.h>
 
 static inline int	i_love_the_norm(void)
 {

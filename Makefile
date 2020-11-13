@@ -13,10 +13,13 @@ SRC	=	main.c \
 		builtin/export_support.c\
 		builtin/export_unset.c\
 		builtin/ft_cd.c\
+		parsing/parsing_part1.c\
 		parsing/split_quote.c\
+		parsing/split_redir.c\
 		support/alloc_n_erase.c\
+		support/toolbox.c\
 		support/toolbox2.c\
-		support/toolbox4.c\
+		support/toolbox3.c\
 		support/toolbox5.c\
 		support/error.c\
 		setup/prompt.c\

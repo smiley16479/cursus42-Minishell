@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   toolbox4.c                                         :+:      :+:    :+:   */
+/*   parsing_part1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 22:34:46 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 04:10:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,32 @@ int	check_set(char c, char *set)
 		if (c == set[i])
 			return (1);
 	return (0);
+}
+
+/* 
+** Prend en paramtère la ligne de command taper par l'utilisateur
+** et rend un tableau contenant toutes les chaines qui étaient 
+** délimitées par ";"
+*/
+
+char ***sep_cmdl_to_cmds(char *cmdln)
+{
+	char ***cmds;
+	char **tmp;
+	int i;
+
+	tmp = ft_split_unless_quote(cmdln, ";");
+	if (!(cmds = malloc(sizeof(char *) * (ft_strlen_vec(tmp) + 1))))
+		return (NULL);
+	i = -1;
+	while (tmp[++i])
+	{
+		cmds[i] = ft_split_unless_quote(tmp[i], " \t");
+		free(tmp[i]);
+	}
+	free(tmp);
+	cmds[i]= NULL;
+	return cmds;
 }
 
 /* 
@@ -55,7 +81,33 @@ int get_new_cmdl(char **cmdl)
 /*
 **	Analyse la ligne de commande et la sépare en élément 
 */
+char ***parse_cmdl(char *cmdl)
+{
+		char		***cmds;
+		int i;
 
+		cmds = sep_cmdl_to_cmds(cmdl);
+		i = -1;
+		while(cmds[++i])
+		{
+			parse_cmds(cmds[i] = split_redir(cmds[i]));
+			// ft_check_built_in(cmds);
+		}
+	print_3d_vec(cmds);
+	return (cmds);
+}
+
+int parse_cmds(char **cmd)
+{
+	int i;
+
+	i = -1;
+	while (cmd[++i])
+	{
+		process_quote(&cmd[i]);
+	}
+	return (0);
+}
 
 /*
 ** Affiche un vecteur (char ***) sur stdout

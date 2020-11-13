@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandreschwerer <marvin@42.fr>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:34:18 by alexandre         #+#    #+#             */
-/*   Updated: 2020/10/21 15:38:02 by alexandre        ###   ########.fr       */
+/*   Updated: 2020/11/12 22:58:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include.h"
 
 int		ft_export_pwd(char *command)
 {

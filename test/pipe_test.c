@@ -13,7 +13,6 @@ void if_chevron(char **cmds, int *pipe_fd)
 {
 	int fd;
 	char buf[64];
-	int read_nu;
 
 	bzero(buf, 64);
 	
@@ -31,7 +30,6 @@ int main(void)
 {
 	g_->std_in = dup(STDOUT_FILENO); // il faut ecrire sur stdOUT et pas IN
 	char **cmds;
-	char buf[64];
 
 	if ((cmds = malloc(sizeof(char *) * 6)))
 	{

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 00:13:26 by user42            #+#    #+#             */
-/*   Updated: 2020/11/12 22:14:29 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 00:28:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,6 @@
 # define NEW_LINE "\n"
 // gcc parsing.c -I../Includes ../parsing/split_quote.c ../libft/libft.a -fsanitize=address -g3
 
-/* 
-** Prend en paramtère la ligne de command taper par l'utilisateur
-** et rend un tableau contenant toutes les chaines qui étaient 
-** délimitées par ";"
-*/
-
-char ***sep_cmdl_to_cmds(char *cmdln)
-{
-	char ***cmds;
-	char **tmp;
-	int i;
-
-	tmp = ft_split_unless_quote(cmdln, ";");
-	if (!(cmds = malloc(sizeof(char *) * (ft_strlen_vec(tmp) + 1))))
-		return (NULL);
-	i = -1;
-	while (tmp[++i])
-	{
-		cmds[i] = ft_split_unless_quote(tmp[i], " \t");
-		free(tmp[i]);
-	}
-	free(tmp);
-	cmds[i]= NULL;
-	return cmds;
-}
 
 /* 
 **	Analyse s'il s'agit d'un
@@ -64,22 +39,18 @@ int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-	char		***cmds;
-	char		*cmdl;
-	int i;
+
+	char	*cmdl;
+	char 	***cmds;
+
 	// t_list_cmd	*lst;
 	// t_list_cmd	*tmp;
 
-	cmds = NULL;
+
 	set_env(env);
-	
 	while (get_new_cmdl(&cmdl))
-	{
-		cmds = sep_cmdl_to_cmds(cmdl);
-		i = -1;
-		while(cmds[++i])
-			// ft_check_built_in(cmds);
-		print_3d_vec(cmds);
+	{	
+		cmds = parse_cmdl(cmdl);
 
 /* 		lst = new_lst_of_cmds(cmds);
 		tmp = lst;

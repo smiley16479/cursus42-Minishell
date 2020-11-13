@@ -1,24 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   merge_quote.c                                      :+:      :+:    :+:   */
+/*   parsing_part2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/29 10:34:50 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/10 22:08:24 by user42           ###   ########.fr       */
+/*   Created: 2020/11/13 03:56:24 by user42            #+#    #+#             */
+/*   Updated: 2020/11/13 05:43:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-char	**ft_alias_quote(char **commands)
+void process_simple_quote(char **cmd)
 {
 	int i;
 
 	i = -1;
-	while (commands[++i])
-		if (commands[i][0])
-			commands[i] = set_alias(commands[i]);
-	return (commands);
+	while ((*cmd)[++i])
+		if ((*cmd)[i] == '\'')
+			ft_get_rid(cmd, i);
+}
+
+void process_double_quote(char **cmd)
+{
+	int i;
+
+	i = -1;
+	while ((*cmd)[++i])
+		if ((*cmd)[i] == '\"')
+			ft_get_rid(cmd, i);
+}
+
+int process_quote(char **cmd)
+{
+	int i;
+
+	i = -1;
+	while ((*cmd)[++i])
+		if ((*cmd)[i] == '\'')
+			process_simple_quote(&(*cmd)[i]);
+		if ((*cmd)[i] == '\"')
+			process_double_quote(cmd);
+	return (0);
 }

@@ -1,14 +1,16 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
 
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include "libft.h"
 #include "printf.h"
 #include "get_next_line_bonus.h"
-
-// #include "../Includes/minishell.h"
 
 typedef struct s_list_cmd {
 	char				*cmd;
@@ -56,7 +58,7 @@ char			**g_envv;
 int				g_status;
 
 /*
-**alias.c
+**alias_quote.c
 */
 
 int				double_quote(char **command, int *k);
@@ -66,6 +68,8 @@ char			*alias_envv(char *command);
 void			handle_alias(char **command, int i);
 
 char			*set_alias(char *command);
+
+char			**ft_alias_quote(char **commands);
 
 /*
 **check_built_in.c
@@ -133,11 +137,6 @@ int				ft_parse_cmd(char **commands);
 
 int				ft_empty_commands(char **commands);
 
-/*
-**merge_quote
-*/
-
-char			**ft_alias_quote(char **commands);
 
 /*
 **parse_exec.c
@@ -262,7 +261,7 @@ int				get_rid_cmd(char ***cmd, int beg, int end);
 int				ft_syntax_error(char **commands);
 
 /*
-** toolbox4.c
+** parsing/parsing_part1.c
 */
 
 int				check_set(char c, char *set);
@@ -272,6 +271,8 @@ int				get_new_cmdl(char **cmdl);
 void			print_3d_vec(char ***vec);
 
 void			destroy_3d_vec(char ***vec);
+
+char			***parse_cmdl(char *cmdl);
 
 /*
 ** toolbox5.c

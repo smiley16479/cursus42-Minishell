@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/08 04:07:56 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/13 01:02:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include.h"
 
 void	ft_execve(char *file, char **commands, char *exec)
 {

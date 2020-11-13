@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   split_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandreschwerer <marvin@42.fr>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:10 by alexandre         #+#    #+#             */
-/*   Updated: 2020/10/25 09:51:34 by alexandre        ###   ########.fr       */
+/*   Updated: 2020/11/12 22:51:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include.h"
 
 /*
 ** Isole les chaines de char

@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 20:31:51 by user42            #+#    #+#             */
-/*   Updated: 2020/11/08 16:44:41 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/12 22:57:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include.h"
 
 void	ft_swap_db_char_ptr(char **ptr1, char **ptr2)
 {
