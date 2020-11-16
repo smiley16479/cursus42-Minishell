@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/13 01:02:39 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 10:36:38 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_execve(char *file, char **commands, char *exec)
 **recherche un exécutable dans tous les dossiers mentionnés par Path
 */
 
-int		ft_parse_path(char *exec, char **commands, char **dir)
+char	*ft_parse_path(char *exec, char **dir)
 {
 	char		*file;
 	char		*tmp;
@@ -42,12 +42,13 @@ int		ft_parse_path(char *exec, char **commands, char **dir)
 		if (lstat(file, &filestat) == 0 && (S_ISREG(filestat.st_mode)))
 		{
 			ft_free_split(dir);
-			ft_execve(file, commands, exec);
+			// ft_execve(file, commands, exec);
+			return (file);
 		}
 		free(file);
 	}
 	ft_free_split(dir);
-	return (0);
+	return (NULL);
 }
 
 /*
@@ -55,15 +56,17 @@ int		ft_parse_path(char *exec, char **commands, char **dir)
 **puis dans le dossier présent
 */
 
-int		ft_parse_exec(char *exec, char **commands, char **dir)
+char		*ft_parse_exec(char *exec, char **commands, char **dir)
 {
 	char		*file[2];
+	char		*executable;
 	struct stat	filestat;
 
 	file[0] = NULL;
 	file[1] = NULL;
 	if (dir)
-		ft_parse_path(exec, commands, dir);
+		if ((executable = ft_parse_path(exec, dir)))
+			return (executable);
 	file[0] = getcwd(file[0], 0);
 	file[1] = ft_strjoin(file[0], "/");
 	free(file[0]);
@@ -72,27 +75,28 @@ int		ft_parse_exec(char *exec, char **commands, char **dir)
 	{
 		free(file[0]);
 		free(file[1]);
-		ft_execve(exec, commands, exec);
+		return (exec);
 	}
 	free(file[0]);
 	free(file[1]);
 	ft_error("minishell", exec, "command not found", STAY);
 	exit(127);
-	return (1);
+	return (NULL);
 }
 
 /*
 **déclenche parse_exec
 */
 
-int		parse_child(char **commands)
+char		*parse_child(char **commands)
 {
 	char *path;
+	char *exec;
 
 	path = find_key("PATH");
-	ft_parse_exec(commands[0], commands, ft_split(path, ':'));
-	ft_free_split(commands);
+	exec = ft_parse_exec(commands[0], commands, ft_split(path, ':'));
+	// ft_free_split(commands);
 	free(path);
 	exit(0);
-	return (0);
+	return (exec);
 }

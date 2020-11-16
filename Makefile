@@ -3,7 +3,9 @@ NAME	=	minishell
 
 HEADER	=	$(addprefix -I, $(lft)/printf $(lft)/gnl $(lft)/libft)
 
-CFLAGS	=	-Wall -Werror -Wextra -g3 -fsanitize=address -fno-omit-frame-pointer 
+CFLAGS	=	#-Wall -Werror -Wextra 
+
+SANITIZ	=	-g3 -fsanitize=address -fno-omit-frame-pointer 
 
 CC		=	gcc
 
@@ -14,8 +16,12 @@ SRC	=	main.c \
 		builtin/export_unset.c\
 		builtin/ft_cd.c\
 		parsing/parsing_part1.c\
+		parsing/parsing_part2.c\
+		parsing/parsing_part3.c\
+		parsing/parsing_part4.c\
 		parsing/split_quote.c\
 		parsing/split_redir.c\
+		parsing/parse_exec.c\
 		support/alloc_n_erase.c\
 		support/toolbox.c\
 		support/toolbox2.c\
@@ -29,11 +35,11 @@ SRC	=	main.c \
 OBJ = $(SRC:%.c=%.o)
 
 %.o : %.c
-	@$(CC) -o $@ -c $< $(CFLAGS) $(HEADER) -I.
+	$(CC) -o $@ -c $< $(SANITIZ) $(CFLAGS) $(HEADER) -I.
 
 $(NAME) : $(ft) $(OBJ)
 	@make -C $(lft)
-	@$(CC) -o $@  $^ $(CFLAGS) -L $(lft) -lftx
+	@$(CC) -o $@  $^ $(SANITIZ) $(CFLAGS) -L $(lft) -lftx
 	@echo minishell created 😁
 
 lft	=	../../libft_extended

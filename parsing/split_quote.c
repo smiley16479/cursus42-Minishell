@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:34:30 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/12 16:21:56 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 11:51:15 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ char	**ft_extract_sep_quote(char **dest, char *command, char *sep)
 }
 
 /*
-**Splite en fonction du séparateur,
-**sauf s'il y a des guillemets
+**	Splite en fonction du séparateur,
+**	sauf s'il y a des guillemets
 */
 
 char	**ft_split_unless_quote(char *line, char *sep)

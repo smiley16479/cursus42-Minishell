@@ -94,7 +94,7 @@ int		ft_strlen_vec(char **vec)
 ** Affiche un vecteur (char **) sur stdout
 */
 
-void	print_vec(char **vec)
+void	print_2d_vec(char **vec)
 {
 	while (*vec)
 		ft_printf("%s\n", *vec++);

@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdio.h> // A enlever 
 #include <errno.h>
 #include <string.h>
 #include "libft.h"
@@ -33,7 +34,7 @@ t_list_cmd *new_lst_of_cmds(char **cmds);
 void erase_main_materials(t_list_cmd *lst, char ***cmds, char *cmdl);
 
 
-
+enum standar {in, out};
 
 /* 
 ** Copie de minishell.h
@@ -56,6 +57,10 @@ typedef	struct	s_cmd
 char			**g_envv;
 
 int				g_status;
+
+int				std[2];
+
+typedef char bool;
 
 /*
 **alias_quote.c
@@ -144,9 +149,9 @@ int				ft_empty_commands(char **commands);
 
 void			ft_execve(char *file, char **commands, char *exec);
 
-int				ft_parse_exec(char *exec, char **commands, char **dir);
+char			*ft_parse_exec(char *exec, char **commands, char **dir);
 
-int				parse_child(char **commands);
+char			*parse_child(char **commands);
 
 /*
 **prompt.c
@@ -157,8 +162,6 @@ void			ft_prompt(void);
 /*
 **redir.c
 */
-
-int				ft_syntax_error(char **commands);
 
 int				ft_stdout(char ***commands, int *i);
 
@@ -232,10 +235,11 @@ int				close_pipe(t_cmd *head);
 
 int				file_transfer(int fds, int fdd);
 
-char			*ft_strjoin_sep(char *str1, char *str2, char *sep);
+char			*ft_strjoin_sep(char *str1, char *sep, char *str2);
 
 void			ft_get_rid(char **src, int pos);
 
+void			ft_add_inside(char **dest, char *sep, int pos);
 /*
 **toolbox2.c
 */
@@ -248,7 +252,7 @@ int				ft_strlen_vec(char **vec);
 
 int				has_redir(char **command, int pos);
 
-void			print_vec(char **vec);
+void			print_2d_vec(char **vec);
 
 /*
 *** toolbox3.c
@@ -256,9 +260,14 @@ void			print_vec(char **vec);
 
 int				is_redir(char *str);
 
+bool			which_redir(char *str);
+
 int				get_rid_cmd(char ***cmd, int beg, int end);
 
 int				ft_syntax_error(char **commands);
+
+void			get_rid_cmd_bis(char **cmd, int beg, int end);
+
 
 /*
 ** parsing/parsing_part1.c
@@ -273,6 +282,30 @@ void			print_3d_vec(char ***vec);
 void			destroy_3d_vec(char ***vec);
 
 char			***parse_cmdl(char *cmdl);
+
+int				parse_cmd(char **cmd);
+
+/*
+** parsing/parsing_part2.c
+*/
+
+void			process_quote(char **cmd);
+
+void			process_db_quote(char **cmd, int *i);
+
+void			process_simple_quote(char **cmd, int *i);
+
+/*
+** parsing/parsing_part3.c
+*/
+
+void			process_redir(char **cmd);
+
+/*
+** parsing/parsing_part4.c
+*/
+
+void			loop_pipe(char **cmd);
 
 /*
 ** toolbox5.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2020/11/13 04:10:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 12:10:02 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int	check_set(char c, char *set)
 
 char ***sep_cmdl_to_cmds(char *cmdln)
 {
-	char ***cmds;
-	char **tmp;
-	int i;
+	char	***cmds;
+	char	**tmp;
+	int		i;
 
 	tmp = ft_split_unless_quote(cmdln, ";");
 	if (!(cmds = malloc(sizeof(char *) * (ft_strlen_vec(tmp) + 1))))
@@ -90,22 +90,32 @@ char ***parse_cmdl(char *cmdl)
 		i = -1;
 		while(cmds[++i])
 		{
-			parse_cmds(cmds[i] = split_redir(cmds[i]));
-			// ft_check_built_in(cmds);
+			if ((std[in] = dup(STDIN_FILENO)) < 0 || 0 > (std[out] = dup(STDOUT_FILENO)))
+				ft_error("dup", "fd duplication failed", "dup", STAY);
+			parse_cmd(cmds[i] = split_redir(cmds[i]));
+			if (dup2(std[in], STDIN_FILENO) < 0 || 0 > dup2(std[out], STDOUT_FILENO))
+				ft_error("dup2", "fd duplication failed", "dup2", STAY);
 		}
-	print_3d_vec(cmds);
+		// print_3d_vec(cmds);
 	return (cmds);
 }
 
-int parse_cmds(char **cmd)
-{
-	int i;
+/* 
+**	Active les fonctions de parsing :
+**	1. Les quotes ds le fichier parsing_part.2
+**	2. Les redirections ds le fichier parsing_part.3
+**	3. Les pipes ds le fichier parsing_part.4
+*/
 
-	i = -1;
-	while (cmd[++i])
-	{
-		process_quote(&cmd[i]);
-	}
+int parse_cmd(char **cmd)
+{
+	process_quote(cmd);
+	// process_redir(cmd); // dan sles redir on aura un problème s'il y a plusieurs redirections
+	// ft_check_built_in(cmds);
+	// printf("0 : %s\n1 : %s\n2 : %s\n3 : %s\n4 : %s\n", 
+	// *cmd, *(cmd + 1), *(cmd + 2), *(cmd + 3), *(cmd + 4));
+	loop_pipe(cmd);
+// print_2d_vec(cmd);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:10 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/12 22:51:52 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/16 11:50:29 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ void	cut_strs(char *commands, char **dest, int *k)
 }
 
 /*
-**transforme echo >text.txt en echo > text.txt
+** Prend en paramètre un tablea de chaines et le rend en séparant toutes les commandes
+** par exemple transforme echo>text.txt en echo > text.txt
 */
 
 char	**split_redir(char **commands)
@@ -134,9 +135,10 @@ char	**split_redir(char **commands)
 	k = 0;
 	while (commands[++i])
 		k += ft_find_strs(commands[i]);
-	if (!(dest = malloc((k + 1) * sizeof(char *))))
+	if (!(dest = malloc((k + 2) * sizeof(char *))))
 		ft_error("minishell", strerror(errno), ft_strdup(""), EXIT);
 	dest[k] = NULL;
+	dest[++k] = NULL;
 	k = -1;
 	i = -1;
 	while (commands[++i])

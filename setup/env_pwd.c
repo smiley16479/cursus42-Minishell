@@ -3,33 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   env_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:33:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/08 23:32:48 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/14 21:08:50 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-/*
-** Copie les variables d'environnement
-** à l'exception du OLDPWD
-*/
-
 void	set_env(char **env)
 {
 	int		i;
 	int		j;
-	// char	*cwd;
 
 	i = -1;
 	j = 0;
-	// cwd = NULL;
 	while (env[++i])
 		;
-	// 	if (ft_strnstr(env[i], "OLDPWD", 6) != NULL)
-	// 		j = 1;
 	if (!(g_envv = malloc((i - j + 1) * sizeof(char*))))
 		ft_error("minishell", strerror(errno), ft_strdup(""), EXIT);
 	i = -1;
