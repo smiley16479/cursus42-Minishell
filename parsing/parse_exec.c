@@ -6,21 +6,11 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/16 10:36:38 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/17 13:18:32 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
-
-void	ft_execve(char *file, char **commands, char *exec)
-{
-	(void)exec;
-	if (execve(file, commands, g_envv) == -1)
-	{
-		ft_error("minishell", strerror(errno), exec, STAY);
-		exit(126);
-	}
-}
 
 /*
 **recherche un exécutable dans tous les dossiers mentionnés par Path
@@ -97,6 +87,6 @@ char		*parse_child(char **commands)
 	exec = ft_parse_exec(commands[0], commands, ft_split(path, ':'));
 	// ft_free_split(commands);
 	free(path);
-	exit(0);
+	// exit(0);
 	return (exec);
 }

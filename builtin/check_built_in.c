@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_built_in.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:32:40 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/10 21:55:36 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 13:12:03 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ int		ft_check_built_in(char **cmds)
 	else if (ft_strcmp("pwd", cmds[0]) == 0)
 		g_status = ft_pwd() << 8;
 	else
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }

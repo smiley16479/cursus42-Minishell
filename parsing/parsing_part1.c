@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2020/11/16 12:10:02 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/17 13:29:39 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,17 +104,18 @@ char ***parse_cmdl(char *cmdl)
 **	Active les fonctions de parsing :
 **	1. Les quotes ds le fichier parsing_part.2
 **	2. Les redirections ds le fichier parsing_part.3
-**	3. Les pipes ds le fichier parsing_part.4
+**	3. Les pipes et l'éxécution ds le fichier parsing_part.4
 */
 
 int parse_cmd(char **cmd)
 {
 	process_quote(cmd);
-	// process_redir(cmd); // dan sles redir on aura un problème s'il y a plusieurs redirections
+	// process_redir(cmd); // dans les redir on aura un problème s'il y a plusieurs redirections
 	// ft_check_built_in(cmds);
 	// printf("0 : %s\n1 : %s\n2 : %s\n3 : %s\n4 : %s\n", 
 	// *cmd, *(cmd + 1), *(cmd + 2), *(cmd + 3), *(cmd + 4));
 	loop_pipe(cmd);
+	free(cmd);
 // print_2d_vec(cmd);
 	return (0);
 }
@@ -122,18 +123,6 @@ int parse_cmd(char **cmd)
 /*
 ** Affiche un vecteur (char ***) sur stdout
 */
-
-/* void	print_3d_vec(char ***vec)
-{
-	if (vec && *vec && **vec)
-		while (*vec)
-		{
-			while (**vec)
-				ft_printf("%s\n", *(*vec)++);
-			ft_printf("remise à zero\n");
-			++vec;
-		}
-} */ // Ne marche pas car déplace le **vec qui ne peut plus etre utilisé
 
 void	print_3d_vec(char ***vec)
 {

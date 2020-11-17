@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:10 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/16 11:50:29 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/16 12:50:19 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,10 @@ char	**split_redir(char **commands)
 	k = 0;
 	while (commands[++i])
 		k += ft_find_strs(commands[i]);
-	if (!(dest = malloc((k + 2) * sizeof(char *))))
+	if (!(dest = malloc((k + 3) * sizeof(char *))))
 		ft_error("minishell", strerror(errno), ft_strdup(""), EXIT);
 	dest[k] = NULL;
+	dest[++k] = NULL;
 	dest[++k] = NULL;
 	k = -1;
 	i = -1;
