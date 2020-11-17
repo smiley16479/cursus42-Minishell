@@ -250,8 +250,6 @@ char			**set_new_commands(char **commands, int i, int pos);
 
 int				ft_strlen_vec(char **vec);
 
-int				has_redir(char **command, int pos);
-
 void			print_2d_vec(char **vec);
 
 /*
@@ -304,6 +302,8 @@ void			process_redir(char **cmd);
 /*
 ** parsing/parsing_part4.c
 */
+
+void			execution(char **cmd) ;
 
 void			loop_pipe(char **cmd);
 

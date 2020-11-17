@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:51 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/11 23:15:52 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/17 18:46:48 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-int		has_redir(char **command, int pos)
-{
-	int i;
-
-	i = -1;
-	while (++i < pos && command[i])
-	{
-		if (!(ft_strcmp(command[i], ">")) || !(ft_strcmp(command[i], ">>")) ||
-		!(ft_strcmp(command[i], "<")) || !(ft_strcmp(command[i], "|")))
-			return (1);
-	}
-	return (0);
-}
 
 /*
 **free tous les pointeurs d'un array, puis cet array

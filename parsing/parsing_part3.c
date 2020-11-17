@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 17:35:01 by adtheus           #+#    #+#             */
-/*   Updated: 2020/11/17 14:07:08 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/17 17:47:07 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void chevron_simple_et_db(char **cmd, bool b)
 		ft_error("open", strerror(errno), (b == 1 ? ">" : ">>"), STAY);
 	// close(fd);
 	get_rid_cmd_bis(cmd, 0, 1);
-	--cmd;
 }
 
 void backward_chevron(char **cmd)
@@ -40,20 +39,20 @@ void backward_chevron(char **cmd)
 	close(p[1]);
 	close(fd);
 	get_rid_cmd_bis(cmd, 0, 1);
-	--cmd;
 }
 
 void	process_redir(char **cmd)
 {
-	int	i;
+	int	redir_type;
 
-	i = -1;
 	while (*cmd)
 	{	
-		if (which_redir(*cmd) == 1 || which_redir(*cmd) == 2)
-			chevron_simple_et_db(cmd, which_redir(*cmd));
-		if (which_redir(*cmd) == 3)
+		redir_type = which_redir(*cmd);
+		if (redir_type == 1 || redir_type == 2)
+			chevron_simple_et_db(cmd, redir_type);
+		else if (redir_type == 3)
 			backward_chevron(cmd);
-		++cmd;
+		else
+			++cmd;
 	}
 }

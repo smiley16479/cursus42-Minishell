@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:32:40 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/17 13:12:03 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/17 18:31:35 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void	ft_exit(char **commands)
 }
 
 /*
-***Renvoie vers le bon built in.
-***Renvoie 0 si un builtin est détecté
-***1 sinon
+** Renvoie vers le bon built in.
+** Renvoie 1 si un builtin est détecté
+** 0 sinon
 */
 
 int		ft_check_built_in(char **cmds)

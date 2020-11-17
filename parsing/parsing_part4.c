@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 09:35:07 by adtheus           #+#    #+#             */
-/*   Updated: 2020/11/17 13:51:14 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/17 19:39:32 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,45 @@ int		pipe_followed(char **cmd)
 	return (0);
 }
 
+void	simple_cmd(char **cmd)
+{
+	pid_t	pid;
 
+	process_redir(cmd);
+	if (ft_check_built_in(cmd))
+		return ;
+	if ((pid = fork()) == -1)
+		exit(EXIT_FAILURE);
+	else if (pid == 0)
+		if (execve(parse_child(cmd), cmd, g_envv) < 0)
+			exit(EXIT_FAILURE); // 126 ?
+	waitpid(pid, &g_status, 0);
+}
 
-void	loop_pipe(char **cmd) 
+void	execution(char **cmd)
+{
+	if (!pipe_followed(cmd))
+	{
+		simple_cmd(cmd);
+		while (*cmd)
+			free(*cmd++);
+	}
+	else
+		loop_pipe(cmd);
+}
+
+void	loop_pipe(char **cmd)
 {
 	int		p[2];
 	pid_t	pid;
 	int		fd_in = 0; // faut il les remplacer par std[in]
-	int		piped;	
+	int		piped;
 
 	while (!(*cmd == NULL && *(cmd + 1) == NULL))
 	{
-		piped = pipe_followed(cmd);
 		pipe(p);
+		process_redir(cmd);
+		piped = pipe_followed(cmd);
 		if ((pid = fork()) == -1)
 			exit(EXIT_FAILURE);
 		else if (pid == 0)
@@ -50,11 +76,8 @@ void	loop_pipe(char **cmd)
 			if (piped)
 				dup2(p[1], 1);
 			close(p[0]); // close(p[1]); <-- ne semble pas nécessaire
-			
-			process_redir(cmd);
 			if (ft_check_built_in(cmd))
-				exit(EXIT_SUCCESS);
-
+				exit(g_status);
 			char *exec = parse_child(cmd);
 			if (execve(exec, cmd, g_envv) < 0)
 				write(2, "ERROR\n", 6); // execve(find_exec((*cmd)[0]), *cmd, g_envv); // la *str de parse_child n'est pas free
@@ -62,16 +85,13 @@ void	loop_pipe(char **cmd)
 		}
 		else
 		{
-			waitpid(-1, NULL,  WNOHANG);
+			// waitpid(-1, NULL,  WNOHANG); // <-- ne semble pas nécessaire
 			close(p[1]);
 			fd_in = p[0]; //save the input for the next command
-			while (*cmd) // while (*cmd++); ? ça marcherait pas mieux ça 
-			{
-				free(*cmd);
-				++cmd;	
-			}
+			while (*cmd)
+				free(*cmd++);
 			++cmd;
 		}
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &g_status, 0);
 }

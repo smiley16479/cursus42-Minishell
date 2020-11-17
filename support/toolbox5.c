@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2020/11/14 00:55:33 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/17 18:59:12 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,35 @@ int	verify_duplicate_token_in_cmdl(char *cmdl)
 	return (0);
 }
 
-/* int main(void)
-{
-	char *str1 = "'|| ef'f 'fd 's>> '\"";
+/*
+** Affiche un vecteur (char ***) sur stdout
+*/
 
-	char error;
-	if ((error = verify_duplicate_token_in_cmdl(str1)))
-		printf("erreur près du symbole :%c\n", error);
-	return (0);
-} */
+void	print_3d_vec(char ***vec)
+{
+	int i;
+
+	if (vec && *vec && **vec)
+		while (*vec && (i = -1))
+		{
+			while ((*vec)[++i])
+				ft_printf("%s\n", (*vec)[i]);
+			++vec;
+		}
+}
+
+void	destroy_3d_vec(char ***vec)
+{
+	int		i;
+	char	***tmp;
+
+	tmp = vec;
+	if (vec && *vec && **vec)
+		while (*vec && (i = -1))
+		{
+			while ((*vec)[++i])
+				free((*vec)[i]);
+			free(*vec++);
+		}
+	free(tmp);
+}
