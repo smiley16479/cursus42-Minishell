@@ -37,6 +37,8 @@ int		ft_isascii(int c);
 
 int		ft_isdigit(int c);
 
+int		ft_isspace(int c);
+
 int		ft_isprint(int c);
 
 void	*ft_memccpy(void *d, const void *s, int c, size_t n);

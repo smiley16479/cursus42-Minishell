@@ -22,10 +22,6 @@
 # include <limits.h>
 
 int		get_next_line(int fd, char **line);
-char	*ft_strdup(char *s);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_substr(char *s, int start, size_t len);
-int		ft_strlen(char *s);
 int		error(int fd, char **line);
 char	*readline(char *str, int fd);
 int		isin(char c, const char *s, int len);

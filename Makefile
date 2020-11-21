@@ -1,7 +1,7 @@
 
 NAME	=	minishell
 
-HEADER	=	$(addprefix -I, $(lft)/printf $(lft)/gnl $(lft)/libft)
+HEADER	=	$(addprefix -I, libft/Includes)
 
 CFLAGS	=	-Wall -Werror -Wextra 
 
@@ -40,10 +40,10 @@ OBJ = $(SRC:%.c=%.o)
 
 $(NAME) : $(ft) $(OBJ)
 	@make -C $(lft)
-	@$(CC) -o $@  $^ $(SANITIZ) $(CFLAGS) -L $(lft) -lftx
-	@echo minishell created 😁
+	@$(CC) -o $@  $^ $(SANITIZ) $(CFLAGS) $(HEADER) -L $(lft) -lft
+	@echo minishell created 
 
-lft	=	../../libft_extended
+lft	=	libft
 
 all : $(NAME)
 
@@ -64,4 +64,4 @@ re : fclean all
 show:
 		@echo "HEADER : " $(HEADER)
 
-.PHONE : libft
+.PHONY : libft

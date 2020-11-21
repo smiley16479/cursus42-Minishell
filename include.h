@@ -21,8 +21,7 @@
 # include <errno.h>
 # include <string.h>
 # include "libft.h"
-# include "printf.h"
-# include "get_next_line_bonus.h"
+# include "get_next_line.h"
 
 enum	e_standar {in, out};
 
