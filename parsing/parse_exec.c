@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/17 13:18:32 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/19 18:38:25 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*ft_parse_path(char *exec, char **dir)
 **puis dans le dossier présent
 */
 
-char		*ft_parse_exec(char *exec, char **commands, char **dir)
+char		*ft_parse_exec(char *exec, char **dir)
 {
 	char		*file[2];
 	char		*executable;
@@ -84,7 +84,7 @@ char		*parse_child(char **commands)
 	char *exec;
 
 	path = find_key("PATH");
-	exec = ft_parse_exec(commands[0], commands, ft_split(path, ':'));
+	exec = ft_parse_exec(commands[0], ft_split(path, ':'));
 	// ft_free_split(commands);
 	free(path);
 	// exit(0);

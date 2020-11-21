@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 01:07:09 by adtheus           #+#    #+#             */
-/*   Updated: 2020/11/17 14:21:01 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 21:55:15 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ int main(int ac, char **av, char **env)
 
 
 	set_env(env);
-	while (get_new_cmdl(&cmdl))
+	signal_set_up(ft_handle_signal);
+	while (get_new_cmdl(&cmdl) > 0)
 	{	
+		signal_set_up(ft_handle_signal);
 		cmds = parse_cmdl(cmdl);
 
 /* 		lst = new_lst_of_cmds(cmds);

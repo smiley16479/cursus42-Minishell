@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:10 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/16 12:50:19 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 21:40:33 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ char	**split_redir(char **commands)
 	dest[k] = NULL;
 	dest[++k] = NULL;
 	dest[++k] = NULL;
+	end_tab = &dest[k];
 	k = -1;
 	i = -1;
 	while (commands[++i])

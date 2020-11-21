@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:41 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/08 20:09:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/21 19:29:12 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_prompt(void)
 	{
 		var = ft_split(g_envv[i], '=');
 		if (ft_strcmp(var[0], "HOME") == 0 && (j = 1))
-			home = ft_strdup(var[1]);
+			home = !var[1] ? ft_strdup("") : ft_strdup(var[1]);
 		ft_free_split(var);
 	}
 	ft_prompt_suite(j, home, pwd);

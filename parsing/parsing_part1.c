@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2020/11/17 19:07:37 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 19:38:35 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,26 @@ int get_new_cmdl(char **cmdl)
 }
 
 /*
-**	Analyse la ligne de commande et la sépare en élément 
+**	Sépare la ligne de commande en commandes et l'analyse
 */
 char ***parse_cmdl(char *cmdl)
 {
 		char		***cmds;
 		int i;
 
-		cmds = sep_cmdl_to_cmds(cmdl);
+		if (!*(cmds = sep_cmdl_to_cmds(cmdl)))
+			return(cmds);
+		else if (!(**cmds))
+		{
+			free(*cmds);
+			return(cmds);
+		}
 		i = -1;
 		while(cmds[++i])
 		{
 			if ((std[in] = dup(STDIN_FILENO)) < 0 || 0 > (std[out] = dup(STDOUT_FILENO)))
 				ft_error("dup", "fd duplication failed", "dup", STAY);
-			parse_cmd(cmds[i] = split_redir(cmds[i]));
+			process_cmd(cmds[i] = split_redir(cmds[i]));
 			if (dup2(std[in], STDIN_FILENO) < 0 || 0 > dup2(std[out], STDOUT_FILENO))
 				ft_error("dup2", "fd duplication failed", "dup2", STAY);
 		}
@@ -106,9 +112,9 @@ char ***parse_cmdl(char *cmdl)
 **	3. Les pipes et l'éxécution ds le fichier parsing_part.4
 */
 
-int parse_cmd(char **cmd)
+int process_cmd(char **cmd)
 {
-	process_quote(cmd);
+	parse_cmd(cmd);
 	// process_redir(cmd); // dans les redir on aura un problème s'il y a plusieurs redirections
 	execution(cmd);
 	free(cmd);

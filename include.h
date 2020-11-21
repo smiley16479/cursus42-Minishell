@@ -27,10 +27,6 @@ void erase_db_char_ptr(char ***cmds);
 
 void erase_lst(t_list_cmd *lst);
 
-t_list_cmd *ft_lstnew_cmd(void *content);
-
-t_list_cmd *new_lst_of_cmds(char **cmds);
-
 void erase_main_materials(t_list_cmd *lst, char ***cmds, char *cmdl);
 
 
@@ -55,6 +51,8 @@ typedef	struct	s_cmd
 }				t_cmd;
 
 char			**g_envv;
+
+char			**end_tab;
 
 int				g_status;
 
@@ -92,6 +90,8 @@ int				ft_echo(char **commands);
 **env_pwd.c
 */
 
+char			**ft_cut_export_var(char *str, char delim);
+
 void			set_env(char **env);
 
 int				ft_print_env(char **env, int trie);
@@ -107,16 +107,23 @@ int				ft_pwd(void);
 int				ft_error(char *proc, char *mess, char *command, int out);
 
 /*
-**export_unset
+** ft_export.c
 */
 
 int				ft_add_envv(char *command);
 
-int				ft_export(char *command, char **var);
+int				ft_export_error(char *command, char **var);
+
+int				ft_export(char **var);
+
+/* 
+** ft_unset.c
+*/
 
 int				ft_destroy(int i);
 
-int				ft_unset(char *command);
+int				ft_unset(char **variables, int i , int j);
+
 
 /*
 **export_support
@@ -149,7 +156,7 @@ int				ft_empty_commands(char **commands);
 
 void			ft_execve(char *file, char **commands, char *exec);
 
-char			*ft_parse_exec(char *exec, char **commands, char **dir);
+char			*ft_parse_exec(char *exec, char **dir);
 
 char			*parse_child(char **commands);
 
@@ -246,8 +253,6 @@ void			ft_add_inside(char **dest, char *sep, int pos);
 
 int				ft_free_split(char **commands);
 
-char			**set_new_commands(char **commands, int i, int pos);
-
 int				ft_strlen_vec(char **vec);
 
 void			print_2d_vec(char **vec);
@@ -261,8 +266,6 @@ int				is_redir(char *str);
 bool			which_redir(char *str);
 
 int				get_rid_cmd(char ***cmd, int beg, int end);
-
-int				ft_syntax_error(char **commands);
 
 void			get_rid_cmd_bis(char **cmd, int beg, int end);
 
@@ -281,15 +284,15 @@ void			destroy_3d_vec(char ***vec);
 
 char			***parse_cmdl(char *cmdl);
 
-int				parse_cmd(char **cmd);
+int				process_cmd(char **cmd);
 
 /*
 ** parsing/parsing_part2.c
 */
 
-void			process_quote(char **cmd);
+void			parse_cmd(char **cmd);
 
-void			process_db_quote(char **cmd, int *i);
+int				process_db_quote(char **cmd, int *i);
 
 void			process_simple_quote(char **cmd, int *i);
 
@@ -305,7 +308,7 @@ void			process_redir(char **cmd);
 
 void			execution(char **cmd) ;
 
-void			loop_pipe(char **cmd);
+void			loop_pipe(char **cmd, int *I_L_T_N);
 
 /*
 ** toolbox5.c

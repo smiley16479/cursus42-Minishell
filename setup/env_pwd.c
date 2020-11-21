@@ -6,36 +6,52 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:33:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/14 21:08:50 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 17:24:07 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
+/*
+**
+*/
+char	**ft_cut_export_var(char *str, char delim)
+{
+	int	i;
+	char **dest;
+	
+	i = 0;
+	if ((dest = malloc(sizeof(char *) * 3)))
+	{
+		while (str[i] && str[i] != delim)
+			++i;
+		if (str[i] == delim || str[i] == '\0')
+			dest[0] = copy_word(str, 0 , i);
+		dest[1] = !str[i] ? NULL : copy_word(str, i + 1, ft_strlen(str));
+		dest[2] = NULL;
+	}
+	return (dest);
+}
+
+/*
+** Copie l'environnement incrémente la variable SHLVL
+*/
+
 void	set_env(char **env)
 {
 	int		i;
-	int		j;
 
 	i = -1;
-	j = 0;
 	while (env[++i])
 		;
-	if (!(g_envv = malloc((i - j + 1) * sizeof(char*))))
+	if (!(g_envv = malloc((i + 1) * sizeof(char*))))
 		ft_error("minishell", strerror(errno), ft_strdup(""), EXIT);
 	i = -1;
-	j = 0;
-	while (env[++i + j])
+	while (env[++i])
 	{
-//les deux variables devraient etre copiees mais _ devrait
-//s'update en function de la dernière commande.
-
-		// if (ft_strnstr(env[i + j], "OLDPWD", 6))
-		// 	g_envv[i] = getcwd(cwd, 0);
-		// else if (ft_strnstr(env[i + j], "_", 1))
-		// 	j += 1;
-		// else
-			g_envv[i] = ft_strdup(env[i + j]);
+		g_envv[i] = ft_strdup(env[i]);
+		if (!strncmp(g_envv[i], "SHLVL=", 6) && ft_isdigit(g_envv[i][6]))
+			++g_envv[i][6];
 	}
 	g_envv[i] = NULL;
 	g_status = 0;
@@ -87,7 +103,8 @@ char	*find_key(char *key)
 	i = -1;
 	while (g_envv[++i])
 	{
-		vec = ft_split(g_envv[i], '=');
+		// vec = ft_split(g_envv[i], '=');
+		vec = ft_cut_export_var(g_envv[i], '=');
 		if (ft_strcmp(vec[0], key) == 0)
 		{
 			dest = vec[1];

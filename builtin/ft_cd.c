@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:34:18 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/12 22:58:31 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/21 17:49:03 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		ft_export_pwd(char *command)
 void	ft_cd_exp(char *path, int i)
 {
 	char	buff[1024];
+	char	**split;
 	char	*oldpwd;
 	char	*pwd;
 	char	*keypwd;
@@ -44,10 +45,11 @@ void	ft_cd_exp(char *path, int i)
 	keypwd = find_key("PWD");
 	oldpwd = ft_strjoin("OLDPWD=", keypwd);
 	pwd = ft_strjoin("PWD=", buff);
-	ft_export(oldpwd, ft_split(oldpwd, '='));
+	ft_export((split = ft_split(oldpwd, '=')));
 	ft_export_pwd(pwd);
 	if (i)
 		free(path);
+	ft_free_split(split);
 	free(keypwd);
 	free(oldpwd);
 }
@@ -59,8 +61,18 @@ int		ft_cd(char *path)
 	i = !(path) ? 1 : 0;
 	if (!(path))
 		path = find_key("HOME");
-	if (!(path[0]))
-		return (!(ft_error("minishell", "cd", "HOME not set", STAY)));
+	if (!(path))
+	{
+		free(path);
+		path = NULL;
+		return (ft_error("minishell", "cd", "HOME not set", STAY));
+	}
+	else if (!(path[0]))
+	{
+		free(path);
+		path = NULL;
+		return (!ft_error("minishell", "cd", "HOME not set", STAY));
+	}
 	if ((g_status = !(!(chdir(path)))))
 		return (!(ft_error("cd", strerror(errno), path, STAY)));
 	else

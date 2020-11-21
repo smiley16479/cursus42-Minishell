@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   toolbox5.c                                         :+:      :+:    :+:   */
+/*   toolbox4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2020/11/17 18:59:12 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:05:14 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int	verify_duplicate_token_in_cmdl(char *cmdl)
 	while (*cmdl)
 	{
 		if (skip_apostrophy(&cmdl) || is_two_token(&cmdl))
-			return (!ft_error("Bash", "Token", "bad syntaxt", STAY));
+			return ((g_status = 
+			(2 + ft_error("Bash", "Token", "bad syntaxt", STAY)) << 8));
 		if (*cmdl && *cmdl != '\'' && *cmdl != '\"')
 			++cmdl;
 	}
