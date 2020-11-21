@@ -1,38 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   include.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/21 21:45:33 by user42            #+#    #+#             */
+/*   Updated: 2020/11/21 22:42:24 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef INCLUDE_H
-#define INCLUDE_H
+# define INCLUDE_H
 
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdio.h> // A enlever 
-#include <errno.h>
-#include <string.h>
-#include "libft.h"
-#include "printf.h"
-#include "get_next_line_bonus.h"
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
+# include <unistd.h>
+# include <errno.h>
+# include <string.h>
+# include "libft.h"
+# include "printf.h"
+# include "get_next_line_bonus.h"
 
-typedef struct s_list_cmd {
-	char				*cmd;
-	char				**arg;
-	struct s_list_cmd	*next;
-}				t_list_cmd;
+enum	e_standar {in, out};
 
-/* 
-** alloc_n_erase.c
-*/
-
-void erase_db_char_ptr(char ***cmds);
-
-void erase_lst(t_list_cmd *lst);
-
-void erase_main_materials(t_list_cmd *lst, char ***cmds, char *cmdl);
-
-
-enum standar {in, out};
-
-/* 
+/*
 ** Copie de minishell.h
 */
 
@@ -41,24 +35,13 @@ enum standar {in, out};
 # define EXIT 10
 # define STAY 11
 
-typedef	struct	s_cmd
-{
-	char			**cmds;
-	int				pipes[2];
-	struct s_cmd	*next;
-	struct s_cmd	*previous;
-
-}				t_cmd;
-
 char			**g_envv;
 
-char			**end_tab;
+char			**g_endtab;
 
 int				g_status;
 
-int				std[2];
-
-typedef char bool;
+typedef char	t_bool;
 
 /*
 **alias_quote.c
@@ -116,14 +99,13 @@ int				ft_export_error(char *command, char **var);
 
 int				ft_export(char **var);
 
-/* 
+/*
 ** ft_unset.c
 */
 
 int				ft_destroy(int i);
 
-int				ft_unset(char **variables, int i , int j);
-
+int				ft_unset(char **variables, int i, int j);
 
 /*
 **export_support
@@ -148,7 +130,6 @@ int				ft_parse(char **commands);
 int				ft_parse_cmd(char **commands);
 
 int				ft_empty_commands(char **commands);
-
 
 /*
 **parse_exec.c
@@ -215,29 +196,7 @@ int				is_pipe_followed(char *command);
 char			**split_redir(char **commands);
 
 /*
-**Split_pipe
-*/
-
-int				redir_node(t_cmd *cmd, pid_t *pid, int i);
-
-int				redir_cmds(t_cmd *head);
-
-char			**set_cmds(char **commands, int begin, int end);
-
-t_cmd			*ft_split_pipe(char **commands);
-
-/*
-**t_cmd
-*/
-
-int				len_cmd(t_cmd *head);
-
-int				close_pipe_before(t_cmd *cmd);
-
-int				close_pipe(t_cmd *head);
-
-/*
-**toolbox.c
+**toolbox1.c
 */
 
 int				file_transfer(int fds, int fdd);
@@ -247,6 +206,7 @@ char			*ft_strjoin_sep(char *str1, char *sep, char *str2);
 void			ft_get_rid(char **src, int pos);
 
 void			ft_add_inside(char **dest, char *sep, int pos);
+
 /*
 **toolbox2.c
 */
@@ -255,20 +215,17 @@ int				ft_free_split(char **commands);
 
 int				ft_strlen_vec(char **vec);
 
-void			print_2d_vec(char **vec);
-
 /*
 *** toolbox3.c
 */
 
 int				is_redir(char *str);
 
-bool			which_redir(char *str);
+t_bool			which_redir(char *str);
 
 int				get_rid_cmd(char ***cmd, int beg, int end);
 
-void			get_rid_cmd_bis(char **cmd, int beg, int end);
-
+int				get_rid_cmd_bis(char **cmd, int beg, int end);
 
 /*
 ** parsing/parsing_part1.c
@@ -277,10 +234,6 @@ void			get_rid_cmd_bis(char **cmd, int beg, int end);
 int				check_set(char c, char *set);
 
 int				get_new_cmdl(char **cmdl);
-
-void			print_3d_vec(char ***vec);
-
-void			destroy_3d_vec(char ***vec);
 
 char			***parse_cmdl(char *cmdl);
 
@@ -306,12 +259,12 @@ void			process_redir(char **cmd);
 ** parsing/parsing_part4.c
 */
 
-void			execution(char **cmd) ;
+void			execution(char **cmd);
 
-void			loop_pipe(char **cmd, int *I_L_T_N);
+void			loop_pipe(char **cmd, int *i_l_t_n);
 
 /*
-** toolbox5.c
+** toolbox4.c
 */
 
 int				verify_duplicate_token_in_cmdl(char *cmdl);

@@ -3,28 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 03:56:24 by user42            #+#    #+#             */
-/*   Updated: 2020/11/21 18:54:48 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:17:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-/* 
-** deprecated
-*/
-
-int		is_permited_char(int c)
-{
-	if (((c >= ' ' && c <= '~') || (c >= '\a' && c <= '\r'))
-		&& c != '$' && c != '"' && c != '\\' && c != '`')
-		return (1);
-	return (0);
-}
-
-/* 
+/*
 ** Insert la variable (tmp) dans la chaine (*cmd) à la position donnée (*i)
 ** add : j est la taille de la variable (on pourrait s'en passer)
 */
@@ -79,33 +67,39 @@ int		get_allias(char **cmd, int *i)
 		while (j--)
 			ft_get_rid(cmd, *i);
 	if (**cmd == '\0')
-		return (get_rid_cmd_bis(cmd, 0, 0), 1);
+		return (get_rid_cmd_bis(cmd, 0, 0));
 	return (0);
 }
 
-/* 
+/*
 **	Analyse les quote simple ($, ", ` et \ perdent leur sens spécial)
 **	seul le "'" suivant est à détecter
 */
 
 void	process_simple_quote(char **cmd, int *i)
 {
-	bool trigger;
+	t_bool trigger;
 
 	ft_get_rid(cmd, *i);
 	trigger = 1;
 	while ((*cmd)[*i] && trigger)
-		(*cmd)[*i] == '\'' ? ft_get_rid(cmd, *i), (trigger = 0) : ++*i;
+		if ((*cmd)[*i] == '\'')
+		{
+			ft_get_rid(cmd, *i);
+			trigger = 0;
+		}
+		else
+			++*i;
 }
 
-/* 
-**	Analyse les double quote tous les charactères sauf $, ", ` et \ 
+/*
+**	Analyse les double quote tous les charactères sauf $, ", ` et \
 **	perdent leur sens spécial
 */
 
 int		process_db_quote(char **cmd, int *i)
 {
-	bool trigger;
+	t_bool trigger;
 
 	ft_get_rid(cmd, *i);
 	trigger = 1;
@@ -122,17 +116,22 @@ int		process_db_quote(char **cmd, int *i)
 			&& (*cmd)[*i] != '$' && (*cmd)[*i] != '"'
 			&& (*cmd)[*i] != '\\' && (*cmd)[*i] != '`')
 			++*i;
-		(*cmd) && (*cmd)[*i] == '\"' ? ft_get_rid(cmd, *i), (trigger = 0) : 0;
+		if ((*cmd) && (*cmd)[*i] == '\"')
+		{
+			ft_get_rid(cmd, *i);
+			trigger = 0;
+		}
 	}
 	return (0);
 }
 
-/* 
+/*
 ** Analyse la cmd à l'intérieur et à l'exterieur des quotes
-** créer les expansions des $VAR, enlève les quotes (',"), les échapements \, etc..
+** créer les expansions des $VAR, enlève les quotes (',"),
+** les échapements \, etc..
 */
 
-void parse_cmd(char **cmd)
+void	parse_cmd(char **cmd)
 {
 	int i;
 
@@ -152,9 +151,9 @@ void parse_cmd(char **cmd)
 					break ;
 			}
 			else if ((*cmd)[i] == '\\')
-				ft_get_rid(cmd, i++); 
+				ft_get_rid(cmd, i++);
 			else
 				++i;
-		++cmd;		
+		++cmd;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_support.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 20:31:51 by user42            #+#    #+#             */
-/*   Updated: 2020/11/20 19:19:16 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:46:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_swap_db_char_ptr(char **ptr1, char **ptr2)
 	*ptr2 = tmp;
 }
 
-/* 
+/*
 ** Imprime la variable à la façon d'export
 */
 

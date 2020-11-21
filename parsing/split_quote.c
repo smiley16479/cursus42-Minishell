@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:34:30 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/20 01:44:56 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:28:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,6 @@ char	*copy_word(char *line, int prev, int i)
 	tb[1] = 0;
 	if (prev == i)
 		return (NULL);
-	// while (++tb[0] <= i)
-	// 	if (line[tb[0]] == '\t')
-	// 		tb[1] += 4;
 	dest = malloc(i - prev + tb[1] + 1);
 	ft_strlcpy(dest, line + prev, i - prev + 1);
 	return (dest);
@@ -109,7 +106,7 @@ char	**ft_split_unless_quote(char *line, char *sep)
 	char **dest;
 
 	command = ft_strtrim(line, sep);
-	dest = malloc((ft_len_split_unless_quote(command, sep) + 1) * sizeof(char *));
+	dest = malloc((ft_len_split_unless_quote(command, sep) + 1) * 8);
 	dest = ft_extract_sep_quote(dest, command, sep);
 	free(command);
 	return (dest);

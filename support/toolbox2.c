@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:51 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/19 20:46:46 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:37:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
-
 
 /*
 **free tous les pointeurs d'un array, puis cet array
@@ -43,14 +42,4 @@ int		ft_strlen_vec(char **vec)
 		while (vec[i])
 			i++;
 	return (i);
-}
-
-/*
-** Affiche un vecteur (char **) sur stdout
-*/
-
-void	print_2d_vec(char **vec)
-{
-	while (*vec)
-		ft_printf("%s\n", *vec++);
 }

@@ -23,7 +23,6 @@ SRC	=	main.c \
 		parsing/split_quote.c\
 		parsing/split_redir.c\
 		parsing/parse_exec.c\
-		support/alloc_n_erase.c\
 		support/toolbox1.c\
 		support/toolbox2.c\
 		support/toolbox3.c\

@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   check_built_in.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:32:40 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 21:50:53 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:46:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-/* 
+/*
 ** En travaux... sert à mettre à jour la variable d'environnement '_'
 */
 
 void	set__var(char **cmds)
 {
-	char	**_var;
+	char	**var;
 
-	if (!(_var = (char**)malloc(sizeof(char *) * 3)))
+	if (!(var = (char**)malloc(sizeof(char *) * 3)))
 		ft_error("minishell", strerror(errno), "malloc", STAY);
-	_var[0]	= ft_strdup("_");
-	_var[1]	= ft_strdup(*cmds);
-	_var[2] = NULL;
-	ft_export(_var);
-	ft_free_split(_var);
+	var[0] = ft_strdup("_");
+	var[1] = ft_strdup(*cmds);
+	var[2] = NULL;
+	ft_export(var);
+	ft_free_split(var);
 }
 
 void	ft_exit(char **commands)
@@ -49,7 +49,6 @@ void	ft_exit(char **commands)
 			}
 		num = ft_atoi(commands[1]);
 	}
-	// ft_free_split(commands);
 	exit(num);
 }
 
@@ -61,8 +60,6 @@ void	ft_exit(char **commands)
 
 int		ft_check_built_in(char **cmds)
 {
-	// for (int i = 0; cmds[i]; i++)
-	// 	printf("cmds[%d] :%s.\n", i,  cmds[i]);
 	if (!*cmds)
 		return (1);
 	if (ft_strcmp("cd", cmds[0]) == 0)

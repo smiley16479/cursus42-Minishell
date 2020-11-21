@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:41 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 22:05:28 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:38:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,15 @@ void	ft_get_rid(char **src, int pos)
 	*src = dest;
 }
 
-/* 
+/*
 ** Ajoute une chaine à l'intérieur d'une autre, à la position voulu
 */
 
 void	ft_add_inside(char **dest, char *sep, int pos)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
+
 	if (!(tmp = malloc(ft_strlen(*dest) + ft_strlen(sep) + 1)))
 		return ;
 	i = -1;

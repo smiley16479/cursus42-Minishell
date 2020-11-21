@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2020/11/21 19:38:35 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:09:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-/* 
+/*
 **	Renvoie (1) si le char (c) fait partie du *set
 */
 
-int	check_set(char c, char *set)
+int		check_set(char c, char *set)
 {
 	int i;
 
@@ -27,13 +27,13 @@ int	check_set(char c, char *set)
 	return (0);
 }
 
-/* 
+/*
 ** Prend en paramtère la ligne de command taper par l'utilisateur
-** et rend un tableau contenant toutes les chaines qui étaient 
+** et rend un tableau contenant toutes les chaines qui étaient
 ** délimitées par ";"
 */
 
-char ***sep_cmdl_to_cmds(char *cmdln)
+char	***sep_cmdl_to_cmds(char *cmdln)
 {
 	char	***cmds;
 	char	**tmp;
@@ -49,20 +49,20 @@ char ***sep_cmdl_to_cmds(char *cmdln)
 		free(tmp[i]);
 	}
 	free(tmp);
-	cmds[i]= NULL;
-	return cmds;
+	cmds[i] = NULL;
+	return (cmds);
 }
 
-/* 
+/*
 **	Le process pour acquérir une ligne de commande :
 **	-	Afficher le prompt
 **	-	Lire la ligne entrée par l'utilisateur depuis stdin (gnl)
-**	-	Vérifier s'il y a des tokens à la suite 
+**	-	Vérifier s'il y a des tokens à la suite
 **			-	si oui redemander une ligne de commande (étape 1)
 **			-	si non envoyer la ligne vers le parsing
 */
 
-int get_new_cmdl(char **cmdl)
+int		get_new_cmdl(char **cmdl)
 {
 	int gnl_ret;
 
@@ -81,41 +81,43 @@ int get_new_cmdl(char **cmdl)
 /*
 **	Sépare la ligne de commande en commandes et l'analyse
 */
-char ***parse_cmdl(char *cmdl)
-{
-		char		***cmds;
-		int i;
 
-		if (!*(cmds = sep_cmdl_to_cmds(cmdl)))
-			return(cmds);
-		else if (!(**cmds))
-		{
-			free(*cmds);
-			return(cmds);
-		}
-		i = -1;
-		while(cmds[++i])
-		{
-			if ((std[in] = dup(STDIN_FILENO)) < 0 || 0 > (std[out] = dup(STDOUT_FILENO)))
-				ft_error("dup", "fd duplication failed", "dup", STAY);
-			process_cmd(cmds[i] = split_redir(cmds[i]));
-			if (dup2(std[in], STDIN_FILENO) < 0 || 0 > dup2(std[out], STDOUT_FILENO))
-				ft_error("dup2", "fd duplication failed", "dup2", STAY);
-		}
+char	***parse_cmdl(char *cmdl)
+{
+	char	***cmds;
+	int		std[2];
+	int		i;
+
+	if (!*(cmds = sep_cmdl_to_cmds(cmdl)))
+		return (cmds);
+	else if (!(**cmds))
+	{
+		free(*cmds);
+		return (cmds);
+	}
+	i = -1;
+	while (cmds[++i])
+	{
+		if ((std[in] = dup(0)) < 0 ||
+			0 > (std[out] = dup(1)))
+			ft_error("dup", "fd duplication failed", "dup", STAY);
+		process_cmd(cmds[i] = split_redir(cmds[i]));
+		if (dup2(std[in], 0) < 0 || 0 > dup2(std[out], 1))
+			ft_error("dup2", "fd duplication failed", "dup2", STAY);
+	}
 	return (cmds);
 }
 
-/* 
+/*
 **	Active les fonctions de parsing :
 **	1. Les quotes ds le fichier parsing_part.2
 **	2. Les redirections ds le fichier parsing_part.3
 **	3. Les pipes et l'éxécution ds le fichier parsing_part.4
 */
 
-int process_cmd(char **cmd)
+int		process_cmd(char **cmd)
 {
 	parse_cmd(cmd);
-	// process_redir(cmd); // dans les redir on aura un problème s'il y a plusieurs redirections
 	execution(cmd);
 	free(cmd);
 	return (0);

@@ -3,30 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   env_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:33:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 17:24:07 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:35:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
 /*
-**
+** Coupe les variable pour export uniquement selon le premier '=' s'il y est.
 */
+
 char	**ft_cut_export_var(char *str, char delim)
 {
-	int	i;
-	char **dest;
-	
+	int		i;
+	char	**dest;
+
 	i = 0;
 	if ((dest = malloc(sizeof(char *) * 3)))
 	{
 		while (str[i] && str[i] != delim)
 			++i;
 		if (str[i] == delim || str[i] == '\0')
-			dest[0] = copy_word(str, 0 , i);
+			dest[0] = copy_word(str, 0, i);
 		dest[1] = !str[i] ? NULL : copy_word(str, i + 1, ft_strlen(str));
 		dest[2] = NULL;
 	}
@@ -103,7 +104,6 @@ char	*find_key(char *key)
 	i = -1;
 	while (g_envv[++i])
 	{
-		// vec = ft_split(g_envv[i], '=');
 		vec = ft_cut_export_var(g_envv[i], '=');
 		if (ft_strcmp(vec[0], key) == 0)
 		{

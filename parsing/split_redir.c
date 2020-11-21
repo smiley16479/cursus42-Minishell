@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:10 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 21:40:33 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:44:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ void	cut_strs(char *commands, char **dest, int *k)
 }
 
 /*
-** Prend en paramètre un tablea de chaines et le rend en séparant toutes les commandes
+** Prend en paramètre un tablea de chaines et le rend en
+** séparant toutes les commandes.
 ** par exemple transforme echo>text.txt en echo > text.txt
 */
 
@@ -140,7 +141,7 @@ char	**split_redir(char **commands)
 	dest[k] = NULL;
 	dest[++k] = NULL;
 	dest[++k] = NULL;
-	end_tab = &dest[k];
+	g_endtab = &dest[k];
 	k = -1;
 	i = -1;
 	while (commands[++i])

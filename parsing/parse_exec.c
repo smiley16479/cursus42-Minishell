@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/19 18:38:25 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/21 22:48:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 **recherche un exécutable dans tous les dossiers mentionnés par Path
 */
 
-char	*ft_parse_path(char *exec, char **dir)
+char		*ft_parse_path(char *exec, char **dir)
 {
 	char		*file;
 	char		*tmp;
@@ -32,7 +32,6 @@ char	*ft_parse_path(char *exec, char **dir)
 		if (lstat(file, &filestat) == 0 && (S_ISREG(filestat.st_mode)))
 		{
 			ft_free_split(dir);
-			// ft_execve(file, commands, exec);
 			return (file);
 		}
 		free(file);
@@ -85,8 +84,6 @@ char		*parse_child(char **commands)
 
 	path = find_key("PATH");
 	exec = ft_parse_exec(commands[0], ft_split(path, ':'));
-	// ft_free_split(commands);
 	free(path);
-	// exit(0);
 	return (exec);
 }
