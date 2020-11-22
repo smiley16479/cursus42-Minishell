@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 09:35:07 by adtheus           #+#    #+#             */
-/*   Updated: 2020/11/21 22:24:45 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/22 18:05:43 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int		pipe_followed(char **cmd)
 	return (0);
 }
 
+/*
+** Execute une commande non pipée
+*/
+
 void	simple_cmd(char **cmd)
 {
 	pid_t	pid;
@@ -43,6 +47,14 @@ void	simple_cmd(char **cmd)
 			exit(EXIT_FAILURE);
 	waitpid(pid, &g_status, 0);
 }
+
+/*
+** Fonction d'appel pour executer les commandes :
+** 	- Si la commande n'est pas pipée on l'éxécute simplement => simple_cmd()
+**	- Si elle comporte des pipes la **cmd est envoyée vers loop_pipe
+**	PS pour la norme i_l_t_n comporte [0] = le fd de la fin du pipe
+**	[1] = si la commande est pipée ou non, [2] = le PID du child actuel
+*/
 
 void	execution(char **cmd)
 {
@@ -90,6 +102,10 @@ void	i_love_the_norm(char ***cmd, int *p, int *i_l_t_n, char *exec)
 	}
 	i_l_t_n[1] = pipe_followed(*cmd);
 }
+
+/*
+** Exécute une commande pipée
+*/
 
 void	loop_pipe(char **cmd, int *i_l_t_n)
 {
