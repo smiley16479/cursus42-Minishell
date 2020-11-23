@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2020/11/21 22:09:17 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/23 17:21:25 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	***sep_cmdl_to_cmds(char *cmdln)
 
 /*
 **	Le process pour acquérir une ligne de commande :
+**	-	Armer les signaux
 **	-	Afficher le prompt
 **	-	Lire la ligne entrée par l'utilisateur depuis stdin (gnl)
 **	-	Vérifier s'il y a des tokens à la suite
@@ -66,6 +67,7 @@ int		get_new_cmdl(char **cmdl)
 {
 	int gnl_ret;
 
+	signal_set_up(ft_handle_signal);
 	ft_prompt();
 	if ((gnl_ret = get_next_line(STDIN_FILENO, cmdl)) > 0)
 		if (verify_duplicate_token_in_cmdl(*cmdl))

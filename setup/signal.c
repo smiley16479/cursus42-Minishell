@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:02 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 21:58:32 by adtheus          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:16:32 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	ft_handle_signal(int signum)
 	if (signum == SIGINT)
 	{
 		g_status = 130 << 8;
+		g_cant_quit = 0;
 		write(1, "\n", 1);
 		ft_prompt();
 		signal(SIGINT, ft_handle_signal);

@@ -3,35 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aschwere <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 12:31:04 by aschwere          #+#    #+#             */
-/*   Updated: 2019/11/15 09:53:36 by aschwere         ###   ########.fr       */
+/*   Updated: 2020/11/23 17:17:10 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
+extern int g_cant_quit;
 
 char	*readline(char *str, int fd)
 {
-	char	buffer[BUFFER_SIZE + 1];
+	char	buff[BUFFER_SIZE + 1];
 	ssize_t bytes_read;
 	char	*tmp;
 
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read > 0 && (!(isin('\n', buffer, bytes_read))))
+	bytes_read = read(fd, buff, BUFFER_SIZE);
+	buff[bytes_read] = '\0';
+	g_cant_quit = 1;
+	while (!(isin('\n', buff, bytes_read)) && g_cant_quit && ft_strlen(buff))
 	{
-		buffer[bytes_read] = '\0';
-		tmp = str;
-		str = ft_strjoin(str, buffer);
-		free(tmp);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if ((g_cant_quit = 1) && bytes_read)
+		{
+			buff[bytes_read] = '\0';
+			tmp = str;
+			str = ft_strjoin(str, buff);
+			free(tmp);
+		}
+		bytes_read = read(fd, buff, BUFFER_SIZE);
+		if (!g_cant_quit)
+			str[0] = '\0';
 	}
-	buffer[bytes_read] = '\0';
+	buff[bytes_read] = '\0';
 	tmp = str;
-	str = ft_strjoin(str, buffer);
+	str = ft_strjoin(str, buff);
 	free(tmp);
 	return (str);
 }
