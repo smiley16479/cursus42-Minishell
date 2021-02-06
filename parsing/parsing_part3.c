@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 17:35:01 by adtheus           #+#    #+#             */
-/*   Updated: 2020/11/21 22:20:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/12/04 22:53:11 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	chevron_simple_et_db(char **cmd, t_bool b)
 		ft_error("open", strerror(errno), (b == 1 ? ">" : ">>"), STAY);
 	if (dup2(fd, 1) == -1)
 		ft_error("open", strerror(errno), (b == 1 ? ">" : ">>"), STAY);
-	get_rid_cmd_bis(cmd, 0, 1);
+	get_rid_cmd(cmd, 0, 1);
 }
 
 void	backward_chevron(char **cmd)
@@ -37,7 +37,7 @@ void	backward_chevron(char **cmd)
 	close(p[0]);
 	close(p[1]);
 	close(fd);
-	get_rid_cmd_bis(cmd, 0, 1);
+	get_rid_cmd(cmd, 0, 1);
 }
 
 void	process_redir(char **cmd)

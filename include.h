@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 21:45:33 by user42            #+#    #+#             */
-/*   Updated: 2020/11/23 17:16:32 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/04 17:07:10 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <string.h>
 # include "libft.h"
 # include "get_next_line.h"
+# include <stdio.h>
 
 enum	e_standar {in, out};
 
@@ -35,6 +36,8 @@ enum	e_standar {in, out};
 # define STAY 11
 
 char			**g_envv;
+
+char			**g_begtab;
 
 char			**g_endtab;
 
@@ -188,6 +191,8 @@ char			**ft_extract_sep_quote(char **dest, char *command, char *sep);
 
 char			**ft_split_unless_quote(char *line, char *sep);
 
+int				change_alias_if_not_in_quote(char **command);
+
 /*
 **split_redir.c
 */
@@ -216,6 +221,9 @@ int				ft_free_split(char **commands);
 
 int				ft_strlen_vec(char **vec);
 
+void			ft_add_vec_to_another(int *pos, char **to_add, char ***cmd, int join);
+
+void			ft_add_cmd(int pos, char *to_add, char ***cmd);
 /*
 *** toolbox3.c
 */
@@ -224,9 +232,15 @@ int				is_redir(char *str);
 
 t_bool			which_redir(char *str);
 
-int				get_rid_cmd(char ***cmd, int beg, int end);
+int				get_rid_cmd(char **cmd, int beg, int end);
 
-int				get_rid_cmd_bis(char **cmd, int beg, int end);
+/*
+*** toolbox4.c
+*/
+
+int				ft_chr_char_of_str1_in_str2(char *str1, char *str2);
+
+int				ft_is_char_in_str(char c, char *str1);
 
 /*
 ** parsing/parsing_part1.c
@@ -244,11 +258,13 @@ int				process_cmd(char **cmd);
 ** parsing/parsing_part2.c
 */
 
-void			parse_cmd(char **cmd);
+char			**parse_cmd(char **cmd);
 
 int				process_db_quote(char **cmd, int *i);
 
 void			process_simple_quote(char **cmd, int *i);
+
+int				get_allias(char **cmd, int *i);
 
 /*
 ** parsing/parsing_part3.c

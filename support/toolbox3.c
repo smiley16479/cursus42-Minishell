@@ -3,66 +3,97 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/29 10:36:51 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 22:41:04 by user42           ###   ########.fr       */
+/*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
+/*   Updated: 2021/02/04 14:56:33 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-int		get_rid_cmd(char ***cmd, int beg, int end)
+int		is_token(int c)
 {
-	char	**dest;
-	int		i;
-	int		j;
+	char *token;
 
-	if (!(dest = malloc(sizeof(char*) * (ft_strlen_vec(*cmd) - (end - beg)))))
-		ft_error("minishell", strerror(errno), ft_strdup(""), EXIT);
-	i = -1;
-	j = -1;
-	while ((*cmd)[++i])
-		if (i < beg || i > end)
-			dest[++j] = ft_strdup((*cmd)[i]);
-	dest[++j] = NULL;
-	free(*cmd);
-	*cmd = dest;
+	token = "|><;";
+	while (*token)
+		if (c == *token++)
+			return (1);
 	return (0);
 }
 
 /*
-** Indique les pos des chaines à détruire selon [beg - end] (inclus)
+** is_spaces_inbetween_token or only one token
 */
 
-int		get_rid_cmd_bis(char **cmd, int beg, int end)
+int		is_two_token(char **cmdl)
 {
-	int i;
-
-	i = -1;
-	while (++i + beg <= end)
-		free(cmd[beg + i]);
-	while (&cmd[end] != g_endtab)
-		cmd[beg++] = cmd[++end];
-	cmd[beg] = NULL;
-	return (1);
+	if (is_token(**cmdl))
+	{
+		++*cmdl;
+		if (**cmdl == '>')
+			++*cmdl;
+		while (ft_isspace(**cmdl))
+			++*cmdl;
+		if (is_token(**cmdl) || **cmdl == '\0')
+			return (1);
+	}
+	return (0);
 }
 
-/*
-**	Return respectivement 1, 2 ,3 ou 4 pour >, >>, < ou | sinon return (0)
-*/
-
-t_bool	which_redir(char *str)
+int		skip_apostrophy(char **cmdl)
 {
-	if (!(str))
-		return (0);
-	else if (!ft_strcmp(str, ">"))
+	if (**cmdl == '\"' || **cmdl == '\'')
+	{
+		if (**cmdl == '\"' && ++*cmdl)
+			while (**cmdl && **cmdl != '\"')
+				++*cmdl;
+		if (**cmdl == '\'' && ++*cmdl)
+			while (**cmdl && **cmdl != '\'')
+				++*cmdl;
+		if (**cmdl == '\'' || **cmdl == '\"')
+		{
+			++*cmdl;
+			return (0);
+		}
+		else if (**cmdl == '\0')
+			return (0);
 		return (1);
-	else if (!ft_strcmp(str, ">>"))
-		return (2);
-	else if (!ft_strcmp(str, "<"))
-		return (3);
-	else if (!ft_strcmp(str, "|"))
-		return (4);
+	}
+	return (0);
+}
+
+int		verify_duplicate_token_in_cmdl(char *cmdl)
+{
+	while (*cmdl)
+	{
+		if (skip_apostrophy(&cmdl) || is_two_token(&cmdl))
+		{
+			return ((g_status = (2 + ft_error("Bash",
+			"Token", "bad syntaxt", STAY)) << 8));
+		}
+		if (*cmdl && *cmdl != '\'' && *cmdl != '\"')
+			++cmdl;
+	}
+	return (0);
+}
+
+int	ft_error(char *proc, char *mess, char *command, int out)
+{
+	write(2, "\e[0;31m", 7);
+	write(2, proc, ft_strlen(proc));
+	write(2, ": ", 2);
+	write(2, mess, ft_strlen(mess));
+	write(2, ": ", 2);
+	write(2, command, ft_strlen(command));
+	write(2, "\n", 1);
+	write(2, "\e[0m", 4);
+	if (out == EXIT)
+	{
+		free(command);
+		ft_free_split(g_envv);
+		exit(0);
+	}
 	return (0);
 }

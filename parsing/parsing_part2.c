@@ -3,14 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 03:56:24 by user42            #+#    #+#             */
-/*   Updated: 2020/11/21 22:17:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/05 11:18:29 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
+
+/*
+** return **char pour une variable qui possède des espaces
+** add : k est la taille de la variable
+*/
+
+char	**get_variable_outside_quote(char *tmp, int k)
+{
+	char	**db;
+	char	**split_db;
+	int		l;
+
+	l = -1;
+	while (g_envv[++l] && (db = ft_cut_export_var(g_envv[l], '=')))
+		if (!ft_strncmp(db[0], tmp, k))
+		{
+			split_db = ft_split_unless_quote(db[1], " \t");
+			ft_free_split(db);
+			free(tmp);
+			return (split_db);
+		}
+		else
+			ft_free_split(db);
+	free(tmp);
+	return (NULL);
+}
+
+int		get_allias_outside_quote(char ***cmd, int *i, int *j)
+{
+	char	*tmp;
+	char	**db_tmp;
+	int		k;
+	printf("ds get_alias_outside pos[%d][%d]\n", *i, *j);
+	ft_get_rid(&(*cmd)[*i], *j);
+	if ((*cmd)[*i][*j] == '?')
+	{
+		ft_get_rid(&(*cmd)[*i], *j);
+		ft_add_inside(&(*cmd)[*i], (tmp = ft_itoa(g_status >> 8)), *j);
+		free(tmp);
+		return (0);
+	}
+	tmp = ft_strdup(&(*cmd)[*i][*j]);
+	k = 0;
+	while (tmp[k] && !check_set(tmp[k], " \"\'$=/\\"))
+		++k;
+	tmp[k] = '\0';
+	if ((db_tmp = get_variable_outside_quote(tmp, k)))
+	{
+		while (k--)
+			ft_get_rid(&(*cmd)[*i], *j);
+		// if (*j)
+		// 	ft_add_vec_to_another(i, db_tmp, cmd, 1);
+		// (*cmd)[*i][*j] ? ft_add_vec_to_another(i, db_tmp, cmd, 0) :
+		// ft_add_vec_to_another(i, db_tmp, cmd, 2);
+		// for (int i = 0; (*cmd)[i]; ++i)
+		// 	printf("ds get_alias_outside cmd[%d]:'%s'\n", i, (*cmd)[i]);
+		
+		free(db_tmp);
+	}
+	else
+		while (k--)
+			ft_get_rid(&(*cmd)[*i], *j);
+	// printf("'%s'\n", *(cmd));
+	// if (*(*cmd)[*i] == '\0')
+	// 	return (get_rid_cmd(&(*cmd)[*i], 0, 0));
+	return (1);
+}
 
 /*
 ** Insert la variable (tmp) dans la chaine (*cmd) à la position donnée (*i)
@@ -59,15 +126,14 @@ int		get_allias(char **cmd, int *i)
 	}
 	tmp = ft_strdup(&(*cmd)[*i]);
 	j = 0;
-	while (tmp[j] && tmp[j] != ' ' && tmp[j] != '"' && tmp[j] != '$'
-			&& tmp[j] != '=' && tmp[j] != '/' && tmp[j] != '\\')
+	while (tmp[j] && !check_set(tmp[j], " \"$=/\\"))
 		++j;
 	tmp[j] = '\0';
 	if (get_variable(cmd, tmp, i, j))
 		while (j--)
 			ft_get_rid(cmd, *i);
 	if (**cmd == '\0')
-		return (get_rid_cmd_bis(cmd, 0, 0));
+		return (get_rid_cmd(cmd, 0, 0));
 	return (0);
 }
 
@@ -105,16 +171,14 @@ int		process_db_quote(char **cmd, int *i)
 	trigger = 1;
 	while ((*cmd) && (*cmd)[*i] && (*cmd)[*i] != '\"' && trigger)
 	{
-		(*cmd)[*i] == '\\' && ((*cmd)[*i + 1] == '$' ||
-		(*cmd)[*i + 1] == '\\' || (*cmd)[*i + 1] == '`' ||
-		(*cmd)[*i + 1] == '\"') ? ft_get_rid(cmd, (*i)++) : 0;
+		(*cmd)[*i] == '\\' && check_set((*cmd)[*i + 1], "$\\\"`") ?
+		ft_get_rid(cmd, (*i)++) : 0;
 		(*cmd)[*i] == '\\' ? ++*i : 0;
 		if ((*cmd)[*i] == '$' && (*cmd)[*i + 1] && get_allias(cmd, i))
 			return (1);
 		while ((*cmd) && (((*cmd)[*i] >= ' ' && (*cmd)[*i] <= '~')
 			|| ((*cmd)[*i] >= '\a' && (*cmd)[*i] <= '\r'))
-			&& (*cmd)[*i] != '$' && (*cmd)[*i] != '"'
-			&& (*cmd)[*i] != '\\' && (*cmd)[*i] != '`')
+			&& !check_set((*cmd)[*i], "$\\\"`"))
 			++*i;
 		if ((*cmd) && (*cmd)[*i] == '\"')
 		{
@@ -131,29 +195,43 @@ int		process_db_quote(char **cmd, int *i)
 ** les échapements \, etc..
 */
 
-void	parse_cmd(char **cmd)
+char 	**parse_cmd(char **cmd)
 {
 	int i;
+	int j;
 
-	while (*cmd && !(i = 0))
+	i = 0;
+	while (cmd[i] && !(j = 0))
 	{
-		while ((*cmd)[i])
-			if ((*cmd)[i] == '\'')
-				process_simple_quote(cmd, &i);
-			else if ((*cmd)[i] == '\"')
+		while (cmd[i][j])
+			if (cmd[i][j] == '\'')
+				process_simple_quote(&cmd[i], &j);
+			else if (cmd[i][j] == '\"')
 			{
-				if (process_db_quote(cmd, &i) && --cmd)
+				if (process_db_quote(&cmd[i], &j))
+				{
+					--i;
 					break ;
+				}	
 			}
-			else if ((*cmd)[i] == '$' && (*cmd)[i + 1])
+			else if (cmd[i][j] == '$' && cmd[i][j + 1]
+				&& !check_set(cmd[i][j + 1], " \"\'"))
 			{
-				if (get_allias(cmd, &i) && --cmd)
-					break ;
+				// printf("AVANT ds parse_cmd[%s]\n", *(cmd + i));
+				// if (get_allias_outside_quote(&cmd, &i, &j))
+				if (get_allias(&cmd[i], &j))
+				{
+					for (int i = 0; (*cmd)[i]; ++i)
+						printf("ds parse_cmd cmd[%d]:'%s'\n", i, cmd[i]);
+					// printf("APRES ds parse_cmd[%s]\n", *(cmd + i));
+					// break ;
+				}
 			}
-			else if ((*cmd)[i] == '\\')
-				ft_get_rid(cmd, i++);
+			else if (cmd[i][j] == '\\')
+				ft_get_rid(&cmd[i], j++);
 			else
-				++i;
-		++cmd;
+				++j;
+		++i;
 	}
+	return (cmd);
 }

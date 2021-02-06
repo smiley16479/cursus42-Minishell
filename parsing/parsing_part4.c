@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 09:35:07 by adtheus           #+#    #+#             */
-/*   Updated: 2020/11/22 18:05:43 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/04 19:55:03 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	execution(char **cmd)
 
 /*
 ** Assure la liaison d'un pipe à l'autre.
-** (était loop_pipe avt de voir que ça faisait 28 lignes)
+** (était loop_pipe avt de voir que ça faisait trop de lignes)
 */
 
 void	i_love_the_norm(char ***cmd, int *p, int *i_l_t_n, char *exec)

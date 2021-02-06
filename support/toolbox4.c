@@ -3,78 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2020/11/21 23:17:10 by user42           ###   ########.fr       */
+/*   Created: 2021/02/04 14:57:28 by adtheus           #+#    #+#             */
+/*   Updated: 2021/02/04 17:14:47 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include.h"
-
-int		is_token(int c)
-{
-	char *token;
-
-	token = "|><;";
-	while (*token)
-		if (c == *token++)
-			return (1);
-	return (0);
-}
-
-/*
-** is_spaces_inbetween_token or only one token
+/* 
+** Cherche si un des charactères de première chaine est ds l'autre
 */
 
-int		is_two_token(char **cmdl)
+int		ft_chr_char_of_str1_in_str2(char *str1, char *str2)
 {
-	if (is_token(**cmdl))
-	{
-		++*cmdl;
-		if (**cmdl == '>')
-			++*cmdl;
-		while (ft_isspace(**cmdl))
-			++*cmdl;
-		if (is_token(**cmdl) || **cmdl == '\0')
-			return (1);
-	}
-	return (0);
-}
+	int i;
 
-int		skip_apostrophy(char **cmdl)
-{
-	if (**cmdl == '\"' || **cmdl == '\'')
+	while (*str2 && !(i = 0))
 	{
-		if (**cmdl == '\"' && ++*cmdl)
-			while (**cmdl && **cmdl != '\"')
-				++*cmdl;
-		if (**cmdl == '\'' && ++*cmdl)
-			while (**cmdl && **cmdl != '\'')
-				++*cmdl;
-		if (**cmdl == '\'' || **cmdl == '\"')
+		while (str1[i])
 		{
-			++*cmdl;
-			return (0);
+			if (str1[i] == *str2)
+				return (1);
+			++i;
 		}
-		else if (**cmdl == '\0')
-			return (0);
-		return (1);
-	}
-	return (0);
-}
-
-int		verify_duplicate_token_in_cmdl(char *cmdl)
-{
-	while (*cmdl)
-	{
-		if (skip_apostrophy(&cmdl) || is_two_token(&cmdl))
-		{
-			return ((g_status = (2 + ft_error("Bash",
-			"Token", "bad syntaxt", STAY)) << 8));
-		}
-		if (*cmdl && *cmdl != '\'' && *cmdl != '\"')
-			++cmdl;
+		++str2;
 	}
 	return (0);
 }

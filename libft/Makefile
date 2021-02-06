@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aschwere <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 13:37:08 by aschwere          #+#    #+#              #
-#    Updated: 2019/11/13 10:57:38 by aschwere         ###   ########.fr        #
+#    Updated: 2020/12/04 15:21:57 by adtheus          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,8 @@ SRCS	=		ft_memset.c	\
 OBJS	=	${SRCS:.c=.o}
 
 .c.o:
-			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+	@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+
 RM		=	rm -f
 
 CC		=	cc
@@ -61,7 +62,7 @@ CC		=	cc
 CFLAGS	=	-Wall -Werror -Wextra -IIncludes/ -DBUFFER_SIZE=32
 
 ${NAME}:	${OBJS}
-			ar -rc ${NAME} ${OBJS}
+			@ar -rc ${NAME} ${OBJS}
 
 
 all:		${NAME}

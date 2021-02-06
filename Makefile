@@ -27,7 +27,6 @@ SRC	=	main.c \
 		support/toolbox2.c\
 		support/toolbox3.c\
 		support/toolbox4.c\
-		support/error.c\
 		setup/prompt.c\
 		setup/env_pwd.c\
 		setup/signal.c\
@@ -36,12 +35,12 @@ SRC	=	main.c \
 OBJ = $(SRC:%.c=%.o)
 
 %.o : %.c
-	$(CC) -o $@ -c $< $(SANITIZ) $(CFLAGS) $(HEADER) -I.
+	@$(CC) -o $@ -c $< $(SANITIZ) $(CFLAGS) $(HEADER) -I.
 
 $(NAME) : $(ft) $(OBJ)
 	@make -C $(lft)
 	@$(CC) -o $@  $^ $(SANITIZ) $(CFLAGS) $(HEADER) -L $(lft) -lft
-	@echo minishell created 
+	@echo minishell created 😄
 
 lft	=	libft
 
