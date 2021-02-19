@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:41 by alexandre         #+#    #+#             */
-/*   Updated: 2020/12/13 19:24:58 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/19 21:45:42 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,3 +86,58 @@ void	ft_add_inside(char **dest, char *sep, int pos)
 	free(*dest);
 	*dest = tmp;
 }
+
+/*
+** Construit un char **tab depuis une list(->cont)
+*/
+
+/* char **construct_tab_from_ls(t_parse **ls)
+{
+	char	**cmd;
+	int		i;
+
+	cmd = malloc(sizeof(cmd) * (list_count(*ls) + 1));
+	if (!cmd)
+		return NULL;
+	i = -1;
+	while (*ls && (((*ls)->typ & CMDEND) != CMDEND))
+	{
+		cmd[++i] = (*ls)->cont;
+		*ls = (*ls)->next;
+	}
+	if (*ls && (((*ls)->typ & CMDEND) == CMDEND))
+		*ls = list_elem_remove(*ls);
+	cmd[++i] = NULL;
+	return (cmd);
+}
+ */
+
+
+char **construct_tab_from_ls(t_parse **ls)
+{
+	char	**cmd;
+	int		i;
+
+	cmd = malloc(sizeof(cmd) * (list_count(*ls) + 1));
+	if (!cmd)
+		return NULL;
+	i = -1;
+	while (*ls && (((*ls)->typ & CMDEND) != CMDEND))
+		if ((*ls)->prev && (((*ls)->prev->typ & STICKY_A) == STICKY_A))
+		{
+			cmd[i] = ft_strjoin(cmd[i], (*ls)->cont);
+			free((*ls)->cont);
+			(*ls)->cont = cmd[i];
+			*ls = (*ls)->next;
+		}
+		else
+		{
+			cmd[++i] = (*ls)->cont;
+			*ls = (*ls)->next;
+		}
+	if (*ls && (((*ls)->typ & CMDEND) == CMDEND))
+		*ls = list_elem_remove(*ls);
+	cmd[++i] = NULL;
+	return (cmd);
+}
+

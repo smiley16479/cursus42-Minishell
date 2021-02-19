@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2021/02/05 14:42:37 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/19 22:32:37 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ int		get_new_cmdl(char **cmdl)
 }
 
 /*
-**	Sépare la ligne de commande en commandes et l'analyse
+**	Active le parsing:
+**	1. Sépare la ligne de commande en commandes
 */
 
 char	***parse_cmdl(char *cmdl)
@@ -108,18 +109,39 @@ char	***parse_cmdl(char *cmdl)
 }
 
 /*
-**	Active les fonctions de parsing :
-**	1. Les quotes ds le fichier parsing_part.2
+**	Active l'éxécution:
+**	1. Analyse les quotes ds le fichier parsing_part.2
 **	2. Les redirections ds le fichier parsing_part.3 (invoqué ds execution())
 **	3. Les pipes et l'éxécution ds le fichier parsing_part.4
 */
 
 int		process_cmd(char **cmd)
 {
-	cmd = parse_cmd(cmd);
-	for (int i = 0; cmd[i]; ++i)
-		printf("cmd:[%s]\n", cmd[i]);
-	execution(cmd);
+	t_parse *parse;
+	
+	(void) parse;
+	// for (int i = 0; cmd[i]; ++i)
+	// 	printf("cmd:[%s]\n", cmd[i]);
+	parse = parse_cmd(cmd);
+	list_rewind(&parse);
+/* 	
+	list_destroy(parse);
+
+
+// Pour ne pas avoir de leak à cause du return prématuré qui empêche execution() de free cmd
+	char **tmp = cmd;
+	while (*cmd)
+	{
+		// printf("process_cmd : %s\n", *cmd);
+		free(*cmd++);
+	}
+	free(tmp);
+	return (0);
+	 */
+	
+	// execution(cmd);
+	execution_ls(parse);
+	list_destroy(parse);
 	free(cmd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 21:45:33 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 17:07:10 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/19 17:28:10 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,27 @@ enum	e_standar {in, out};
 /*
 ** Copie de minishell.h
 */
+
+/* 
+** typ & 0x01	-> sp_quote
+** typ & 0x02	-> db_quote
+** typ & 0x10	-> acollé à la prochaine portion de texte
+** typ & 0x20	-> fin de la commande
+*/
+
+# define SPQUOTE	0x01
+# define DBQUOTE	0x02
+# define STICKY_A	0x10
+# define CMDEND		0x20
+# define STICKY_B	0x80
+
+typedef struct s_parse {
+char			typ;
+char			*cont;
+
+struct s_parse	*prev;
+struct s_parse	*next;
+}	t_parse;
 
 # define BEFORE 0
 # define AFTER 1
@@ -213,6 +234,8 @@ void			ft_get_rid(char **src, int pos);
 
 void			ft_add_inside(char **dest, char *sep, int pos);
 
+char			**construct_tab_from_ls(t_parse **ls);
+
 /*
 **toolbox2.c
 */
@@ -258,11 +281,11 @@ int				process_cmd(char **cmd);
 ** parsing/parsing_part2.c
 */
 
-char			**parse_cmd(char **cmd);
+t_parse			*parse_cmd(char **cmd);
 
-int				process_db_quote(char **cmd, int *i);
+void			process_db_quote(char **cmd, int *i, t_parse **elem);
 
-void			process_simple_quote(char **cmd, int *i);
+void			process_simple_quote(char **cmd, int *i, t_parse **elem);
 
 int				get_allias(char **cmd, int *i);
 
@@ -272,18 +295,37 @@ int				get_allias(char **cmd, int *i);
 
 void			process_redir(char **cmd);
 
+void			process_redir_ls(t_parse *ls);
+
 /*
 ** parsing/parsing_part4.c
 */
 
 void			execution(char **cmd);
 
+void			execution_ls(t_parse *lst);
+
 void			loop_pipe(char **cmd, int *i_l_t_n);
+
+void			loop_pipe_ls(t_parse **ls, int *i_l_t_n);
 
 /*
 ** toolbox4.c
 */
 
 int				verify_duplicate_token_in_cmdl(char *cmdl);
+
+t_parse			*t_parse_add(char typ, char *cont, t_parse *prev);
+
+int				list_count(t_parse *to_count);
+
+void			list_rewind(t_parse **elem);
+
+void			list_destroy(t_parse *to_destroy);
+
+t_parse			*list_elem_remove(t_parse *elem);
+
+void			list_read(t_parse *to_read);
+
 
 #endif

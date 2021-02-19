@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 09:35:07 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/04 19:55:03 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/19 22:22:09 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ int		pipe_followed(char **cmd)
 	{
 		free(*cmd);
 		*cmd = NULL;
+		return (1);
+	}
+	return (0);
+}
+
+int		pipe_followed_ls(t_parse *ls)
+{
+	while (ls && *ls->cont != '|')
+		if (ls->typ == 0)
+			break ;
+		else
+			ls = ls->next;
+	if (ls && *ls->cont == '|' && (ls->typ & 0x0F) == 0)
+	{
+		ls->typ += CMDEND;
 		return (1);
 	}
 	return (0);
@@ -48,6 +63,25 @@ void	simple_cmd(char **cmd)
 	waitpid(pid, &g_status, 0);
 }
 
+void	simple_cmd_ls(t_parse **ls)
+{
+	pid_t	pid;
+	char	**cmd;
+
+	process_redir_ls(*ls);
+	cmd = construct_tab_from_ls(ls);
+	if (ft_check_built_in(cmd))
+		return ;
+	if ((pid = fork()) == -1)
+		exit(EXIT_FAILURE);
+	else if (pid == 0)
+		if (execve(parse_child(cmd), cmd, g_envv) < 0)
+			exit(EXIT_FAILURE);
+	free(cmd);
+	waitpid(pid, &g_status, 0);
+}
+
+
 /*
 ** Fonction d'appel pour executer les commandes :
 ** 	- Si la commande n'est pas pipée on l'éxécute simplement => simple_cmd()
@@ -68,6 +102,16 @@ void	execution(char **cmd)
 	}
 	else
 		loop_pipe(cmd, i_l_t_n);
+}
+
+void	execution_ls(t_parse *ls)
+{
+	int		i_l_t_n[3];
+
+	if (!(i_l_t_n[1] = pipe_followed_ls(ls)))
+		simple_cmd_ls(&ls);
+	else
+		loop_pipe_ls(&ls, i_l_t_n);
 }
 
 /*
@@ -103,6 +147,35 @@ void	i_love_the_norm(char ***cmd, int *p, int *i_l_t_n, char *exec)
 	i_l_t_n[1] = pipe_followed(*cmd);
 }
 
+void	i_love_the_norm_ls(t_parse **ls, int *p, int *i_l_t_n, char *exec)
+{
+	char **cmd;
+
+	cmd = construct_tab_from_ls(ls);
+	if ((i_l_t_n[2] = fork()) == -1)
+		return ((void)ft_error("minishell", strerror(errno), "fork", EXIT));
+	else if (i_l_t_n[2] == 0)
+	{
+		dup2(i_l_t_n[0], 0);
+		if (i_l_t_n[1])
+			dup2(p[1], 1);
+		close(p[0]);
+		if (ft_check_built_in(cmd))
+			exit(g_status);
+		exec = parse_child(cmd);
+		if (execve(exec, cmd, g_envv) < 0)
+			ft_error("minishell", strerror(errno), exec, STAY);
+		exit(126);
+	}
+	else
+	{
+		close(p[1]);
+		i_l_t_n[0] = p[0];
+		free(cmd);
+	}
+	i_l_t_n[1] = pipe_followed_ls(*ls);
+}
+
 /*
 ** Exécute une commande pipée
 */
@@ -119,6 +192,22 @@ void	loop_pipe(char **cmd, int *i_l_t_n)
 		pipe(p);
 		process_redir(cmd);
 		i_love_the_norm(&cmd, p, i_l_t_n, exec);
+	}
+	waitpid(i_l_t_n[2], &g_status, 0);
+}
+
+void	loop_pipe_ls(t_parse **ls, int *i_l_t_n)
+{
+	int		p[2];
+	char	*exec;
+
+	exec = NULL;
+	i_l_t_n[0] = 0;
+	while (!*ls)
+	{
+		pipe(p);
+		process_redir_ls(*ls);
+		i_love_the_norm_ls(ls, p, i_l_t_n, exec);
 	}
 	waitpid(i_l_t_n[2], &g_status, 0);
 }

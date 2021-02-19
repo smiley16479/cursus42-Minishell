@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2021/02/04 14:56:33 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/14 11:53:00 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,22 @@
 
 int		is_token(int c)
 {
-	char *token;
+	char	*token;
+	int		i;
 
-	token = "|><;";
-	while (*token)
-		if (c == *token++)
-			return (1);
+	i = 0;
+	token = " |><;";
+	while (++i && token[i])
+		if (c == token[i])
+			return (i);
 	return (0);
+}
+
+int skip_space_n_is_token(char **cmdl)
+{
+	while (ft_isspace(**cmdl))
+		++*cmdl;
+	return (is_token(**cmdl));
 }
 
 /*
@@ -29,11 +38,16 @@ int		is_token(int c)
 
 int		is_two_token(char **cmdl)
 {
+	if (**cmdl == '>' && *((*cmdl) + 1) == '>')
+		*cmdl += 2;
+	else if (**cmdl == ';' && ++*cmdl)
+	{
+		while (ft_isspace(**cmdl))
+			++*cmdl;
+	}
 	if (is_token(**cmdl))
 	{
 		++*cmdl;
-		if (**cmdl == '>')
-			++*cmdl;
 		while (ft_isspace(**cmdl))
 			++*cmdl;
 		if (is_token(**cmdl) || **cmdl == '\0')
@@ -42,8 +56,9 @@ int		is_two_token(char **cmdl)
 	return (0);
 }
 
-int		skip_apostrophy(char **cmdl)
+int		skip_quote_n_text(char **cmdl, int *text)
 {
+	(void)text;
 	if (**cmdl == '\"' || **cmdl == '\'')
 	{
 		if (**cmdl == '\"' && ++*cmdl)
@@ -66,9 +81,12 @@ int		skip_apostrophy(char **cmdl)
 
 int		verify_duplicate_token_in_cmdl(char *cmdl)
 {
+	int	text;
+
+	text = 0;
 	while (*cmdl)
 	{
-		if (skip_apostrophy(&cmdl) || is_two_token(&cmdl))
+		if (skip_quote_n_text(&cmdl, &text) || is_two_token(&cmdl))
 		{
 			return ((g_status = (2 + ft_error("Bash",
 			"Token", "bad syntaxt", STAY)) << 8));
