@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 17:35:01 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/17 08:27:10 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/22 11:51:08 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,23 +68,7 @@ t_parse	*backward_chevron_ls(t_parse *ls)
 	return (list_elem_remove(ls));
 }
 
-void	process_redir(char **cmd)
-{
-	int	redir_type;
-
-	while (*cmd)
-	{
-		redir_type = which_redir(*cmd);
-		if (redir_type == 1 || redir_type == 2)
-			chevron_simple_et_db(cmd, redir_type);
-		else if (redir_type == 3)
-			backward_chevron(cmd);
-		else
-			++cmd;
-	}
-}
-
-void	process_redir_ls(t_parse *ls)
+int		process_redir_ls(t_parse *ls)
 {
 	int	redir_type;
 
@@ -92,6 +76,12 @@ void	process_redir_ls(t_parse *ls)
 	{
 		if ((redir_type = which_redir(ls->cont)))
 			ls = list_elem_remove(ls);
+		if ((ls->typ & BAD_CHEV) == BAD_CHEV)
+		{
+			write (2, "bash : ambiguous redirection\n", 30);
+			g_status = 1 << 8;
+			return (1);
+		}
 		if (redir_type == 1 || redir_type == 2)
 			ls = chevron_simple_et_db_ls(ls, redir_type);
 		else if (redir_type == 3)
@@ -99,4 +89,5 @@ void	process_redir_ls(t_parse *ls)
 		else
 			ls = ls->next;
 	}
+	return (0);
 }

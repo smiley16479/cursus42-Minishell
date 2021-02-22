@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 01:07:09 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/04 18:14:29 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/22 11:57:50 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ int	main(int ac, char **av, char **env)
 		free(cmdl);
 	}
 	free(cmdl);
-	return (ft_eof());
+	return (/* ft_eof() */0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:01 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 22:48:00 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/22 12:22:00 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ char		*ft_parse_path(char *exec, char **dir)
 	int			i;
 
 	i = -1;
+	if (lstat(exec, &filestat) == 0 && (S_ISREG(filestat.st_mode)))
+		return (exec);
 	while (dir[++i])
 	{
 		tmp = ft_strjoin(dir[i], "/");

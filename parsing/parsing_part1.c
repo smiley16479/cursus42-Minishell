@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2021/02/19 22:32:37 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/22 11:56:42 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		get_new_cmdl(char **cmdl)
 	int gnl_ret;
 
 	signal_set_up(ft_handle_signal);
-	ft_prompt();
+	// ft_prompt();
 	if ((gnl_ret = get_next_line(STDIN_FILENO, cmdl)) > 0)
 		if (verify_duplicate_token_in_cmdl(*cmdl))
 		{
@@ -124,11 +124,8 @@ int		process_cmd(char **cmd)
 	// 	printf("cmd:[%s]\n", cmd[i]);
 	parse = parse_cmd(cmd);
 	list_rewind(&parse);
-/* 	
-	list_destroy(parse);
 
-
-// Pour ne pas avoir de leak à cause du return prématuré qui empêche execution() de free cmd
+/* // Pour ne pas avoir de leak à cause du return prématuré qui empêche execution() de free cmd
 	char **tmp = cmd;
 	while (*cmd)
 	{
@@ -136,12 +133,12 @@ int		process_cmd(char **cmd)
 		free(*cmd++);
 	}
 	free(tmp);
-	return (0);
+	// return (0);
 	 */
 	
-	// execution(cmd);
 	execution_ls(parse);
 	list_destroy(parse);
-	free(cmd);
+	// free(cmd);
+	ft_free_split(cmd);
 	return (0);
 }

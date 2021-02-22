@@ -6,13 +6,13 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2021/02/14 11:53:00 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/22 12:09:42 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
 
-int		is_token(int c)
+/* int		is_token(int c)
 {
 	char	*token;
 	int		i;
@@ -25,16 +25,34 @@ int		is_token(int c)
 	return (0);
 }
 
+int		is_token(char **str)
+{
+	char	*token;
+	int		i;
+	int		trigger;
+
+	trigger = 0;
+	token = ">>\0|\0\0>\0\0<\0\0;\0\0";
+	while (**str && !(i = 0))
+		while (i < 14)
+		{
+			if (!ft_strncmp(&token[i], *str, ft_strlen(&token[i])))
+			{
+				*str += ft_strlen(&token[i]);
+				++trigger;
+				break ;
+			}
+			i += 3;
+		}
+	return (0);
+}
+
 int skip_space_n_is_token(char **cmdl)
 {
 	while (ft_isspace(**cmdl))
 		++*cmdl;
 	return (is_token(**cmdl));
 }
-
-/*
-** is_spaces_inbetween_token or only one token
-*/
 
 int		is_two_token(char **cmdl)
 {
@@ -54,7 +72,44 @@ int		is_two_token(char **cmdl)
 			return (1);
 	}
 	return (0);
+} */
+
+
+int		is_token(char **cmdl)
+{
+	char	*token;
+	int		i;
+
+	token = ">>\0|\0\0>\0\0<\0\0;\0\0";
+	i = 0;
+	while (i < 14)
+	{
+		if (!strncmp(&token[i], *cmdl, strlen(&token[i])))
+		{
+			*cmdl += strlen(&token[i]);
+			return (1);
+		}
+		i += 3;
+	}
+	return (0);
 }
+
+int		is_two_token(char **cmdl)
+{
+	int trigger;
+
+	trigger = 0;
+	while (ft_isspace(**cmdl))
+		++*cmdl;
+	if (is_token(cmdl))
+		++trigger;
+	while (ft_isspace(**cmdl))
+		++*cmdl;
+	if ((is_token(cmdl) && trigger) || **cmdl == '\0')
+		return (1);
+	return (0);
+}
+
 
 int		skip_quote_n_text(char **cmdl, int *text)
 {

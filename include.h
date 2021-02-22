@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 21:45:33 by user42            #+#    #+#             */
-/*   Updated: 2021/02/19 17:28:10 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/22 11:50:39 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ enum	e_standar {in, out};
 # define DBQUOTE	0x02
 # define STICKY_A	0x10
 # define CMDEND		0x20
+# define BAD_CHEV	0x40
 # define STICKY_B	0x80
 
 typedef struct s_parse {
@@ -51,16 +52,10 @@ struct s_parse	*prev;
 struct s_parse	*next;
 }	t_parse;
 
-# define BEFORE 0
-# define AFTER 1
 # define EXIT 10
 # define STAY 11
 
 char			**g_envv;
-
-char			**g_begtab;
-
-char			**g_endtab;
 
 int				g_status;
 
@@ -287,15 +282,11 @@ void			process_db_quote(char **cmd, int *i, t_parse **elem);
 
 void			process_simple_quote(char **cmd, int *i, t_parse **elem);
 
-int				get_allias(char **cmd, int *i);
-
 /*
 ** parsing/parsing_part3.c
 */
 
-void			process_redir(char **cmd);
-
-void			process_redir_ls(t_parse *ls);
+int				process_redir_ls(t_parse *ls);
 
 /*
 ** parsing/parsing_part4.c
@@ -326,6 +317,21 @@ void			list_destroy(t_parse *to_destroy);
 t_parse			*list_elem_remove(t_parse *elem);
 
 void			list_read(t_parse *to_read);
+
+
+/* 
+** toolbox5.c
+*/
+
+void			get_variable_outside_quote_list(char typ, char *tmp, int k, t_parse **ls);
+
+int				get_allias_outside_quote_list(char **cmd, int *i, t_parse **ls);
+
+void			get_str(char **cmd, int *i, t_parse **parse);
+
+int				get_variable(char **cmd, char *tmp, int *i, int j);
+
+int				get_allias(char **cmd, int *i);
 
 
 #endif

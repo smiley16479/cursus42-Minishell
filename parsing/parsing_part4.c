@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 09:35:07 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/19 22:22:09 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/22 11:52:13 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,20 @@
 ** Si la commande courante est suivie d'un pipe return (1) sinon (0)
 */
 
-int		pipe_followed(char **cmd)
-{
-	while (*cmd && **cmd != '|')
-		++cmd;
-	if (*cmd && **cmd == '|')
-	{
-		free(*cmd);
-		*cmd = NULL;
-		return (1);
-	}
-	return (0);
-}
-
 int		pipe_followed_ls(t_parse *ls)
 {
-	while (ls && *ls->cont != '|')
-		if (ls->typ == 0)
+	while (ls)
+		if (*ls->cont == '|' && (ls->typ & 0x0F) == 0)
 			break ;
 		else
 			ls = ls->next;
 	if (ls && *ls->cont == '|' && (ls->typ & 0x0F) == 0)
 	{
 		ls->typ += CMDEND;
+		// printf("ds pipe cont1 : %s, typ ->%d\n", ls->cont, ls->typ);
 		return (1);
 	}
+	// printf("ds pipe cont2 : %s, typ ->%d\n", ls->cont, ls->typ);
 	return (0);
 }
 
@@ -48,36 +37,27 @@ int		pipe_followed_ls(t_parse *ls)
 ** Execute une commande non pipée
 */
 
-void	simple_cmd(char **cmd)
-{
-	pid_t	pid;
-
-	process_redir(cmd);
-	if (ft_check_built_in(cmd))
-		return ;
-	if ((pid = fork()) == -1)
-		exit(EXIT_FAILURE);
-	else if (pid == 0)
-		if (execve(parse_child(cmd), cmd, g_envv) < 0)
-			exit(EXIT_FAILURE);
-	waitpid(pid, &g_status, 0);
-}
-
 void	simple_cmd_ls(t_parse **ls)
 {
 	pid_t	pid;
 	char	**cmd;
 
-	process_redir_ls(*ls);
+	// printf("ds simple cmd\n");
+	// list_read(*ls);
+	if (process_redir_ls(*ls))
+		while ((*ls) && ((*ls)->typ & CMDEND) != CMDEND)
+			(*ls) = (*ls)->next;
 	cmd = construct_tab_from_ls(ls);
+	// for (size_t i = 0; cmd[i]; i++)
+		// printf("cmd[i]: %s\n", cmd[i]);
 	if (ft_check_built_in(cmd))
-		return ;
-	if ((pid = fork()) == -1)
+		/* return */ ;
+	else if ((pid = fork()) == -1)
 		exit(EXIT_FAILURE);
 	else if (pid == 0)
 		if (execve(parse_child(cmd), cmd, g_envv) < 0)
 			exit(EXIT_FAILURE);
-	free(cmd);
+	ft_free_split(cmd);
 	waitpid(pid, &g_status, 0);
 }
 
@@ -89,20 +69,6 @@ void	simple_cmd_ls(t_parse **ls)
 **	PS pour la norme i_l_t_n comporte [0] = le fd de la fin du pipe
 **	[1] = si la commande est pipée ou non, [2] = le PID du child actuel
 */
-
-void	execution(char **cmd)
-{
-	int		i_l_t_n[3];
-
-	if (!(i_l_t_n[1] = pipe_followed(cmd)))
-	{
-		simple_cmd(cmd);
-		while (*cmd)
-			free(*cmd++);
-	}
-	else
-		loop_pipe(cmd, i_l_t_n);
-}
 
 void	execution_ls(t_parse *ls)
 {
@@ -119,39 +85,17 @@ void	execution_ls(t_parse *ls)
 ** (était loop_pipe avt de voir que ça faisait trop de lignes)
 */
 
-void	i_love_the_norm(char ***cmd, int *p, int *i_l_t_n, char *exec)
-{
-	if ((i_l_t_n[2] = fork()) == -1)
-		return ((void)ft_error("minishell", strerror(errno), "fork", EXIT));
-	else if (i_l_t_n[2] == 0)
-	{
-		dup2(i_l_t_n[0], 0);
-		if (i_l_t_n[1])
-			dup2(p[1], 1);
-		close(p[0]);
-		if (ft_check_built_in(*cmd))
-			exit(g_status);
-		exec = parse_child(*cmd);
-		if (execve(exec, *cmd, g_envv) < 0)
-			ft_error("minishell", strerror(errno), exec, STAY);
-		exit(126);
-	}
-	else
-	{
-		close(p[1]);
-		i_l_t_n[0] = p[0];
-		while (**cmd)
-			free(*(*cmd)++);
-		++(*cmd);
-	}
-	i_l_t_n[1] = pipe_followed(*cmd);
-}
-
-void	i_love_the_norm_ls(t_parse **ls, int *p, int *i_l_t_n, char *exec)
+void	loop_pipe_ls_suite(t_parse **ls, int *p, int *i_l_t_n, char *exec)
 {
 	char **cmd;
 
 	cmd = construct_tab_from_ls(ls);
+	// printf("loop_pipe_suite\n");
+	// for (size_t i = 0; cmd[i]; i++)
+	// {
+	// 	printf("loop_pipe,cmd: [%s]\n", cmd[i]);
+	// }
+	// list_read(*ls);
 	if ((i_l_t_n[2] = fork()) == -1)
 		return ((void)ft_error("minishell", strerror(errno), "fork", EXIT));
 	else if (i_l_t_n[2] == 0)
@@ -171,7 +115,7 @@ void	i_love_the_norm_ls(t_parse **ls, int *p, int *i_l_t_n, char *exec)
 	{
 		close(p[1]);
 		i_l_t_n[0] = p[0];
-		free(cmd);
+		ft_free_split(cmd);
 	}
 	i_l_t_n[1] = pipe_followed_ls(*ls);
 }
@@ -180,22 +124,6 @@ void	i_love_the_norm_ls(t_parse **ls, int *p, int *i_l_t_n, char *exec)
 ** Exécute une commande pipée
 */
 
-void	loop_pipe(char **cmd, int *i_l_t_n)
-{
-	int		p[2];
-	char	*exec;
-
-	exec = NULL;
-	i_l_t_n[0] = 0;
-	while (!(*cmd == NULL && *(cmd + 1) == NULL))
-	{
-		pipe(p);
-		process_redir(cmd);
-		i_love_the_norm(&cmd, p, i_l_t_n, exec);
-	}
-	waitpid(i_l_t_n[2], &g_status, 0);
-}
-
 void	loop_pipe_ls(t_parse **ls, int *i_l_t_n)
 {
 	int		p[2];
@@ -203,11 +131,15 @@ void	loop_pipe_ls(t_parse **ls, int *i_l_t_n)
 
 	exec = NULL;
 	i_l_t_n[0] = 0;
-	while (!*ls)
+	// printf("loop_pipe,cmd\n");
+	while (*ls)
 	{
+		// printf("ds loop_pipe cont : %s, typ ->%d\n", (*ls)->cont, (*ls)->typ);
 		pipe(p);
-		process_redir_ls(*ls);
-		i_love_the_norm_ls(ls, p, i_l_t_n, exec);
+		if (process_redir_ls(*ls))
+			while ((*ls) && ((*ls)->typ & CMDEND) != CMDEND)
+				(*ls) = (*ls)->next;
+		loop_pipe_ls_suite(ls, p, i_l_t_n, exec);
 	}
 	waitpid(i_l_t_n[2], &g_status, 0);
 }

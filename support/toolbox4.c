@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:57:28 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/19 22:17:41 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/20 19:38:49 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,18 @@ void	list_read(t_parse *to_read)
 	list_rewind(&to_read);
 	while (to_read)
 	{
-		printf("lst_read->typ %d, cont : %s\n", to_read->typ, to_read->cont);
+		printf("lst_read->typ ");
+		if ((to_read->typ & STICKY_B) == STICKY_B)
+			printf("STICKY_B ");
+		if ((to_read->typ & STICKY_A) == STICKY_A)
+			printf("STICKY_A ");
+		if ((to_read->typ & SPQUOTE) == SPQUOTE)
+			printf("SPQUOTE ");
+		if ((to_read->typ & DBQUOTE) == DBQUOTE)
+			printf("DBQUOTE ");
+		if ((to_read->typ & CMDEND) == CMDEND)
+			printf("CMDEND ");
+		printf(", cont : %s\n" , to_read->cont);
 		to_read = to_read->next;
 	}
 }

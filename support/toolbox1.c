@@ -6,7 +6,7 @@
 /*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:41 by alexandre         #+#    #+#             */
-/*   Updated: 2021/02/19 21:45:42 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/20 16:54:56 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,27 +116,35 @@ void	ft_add_inside(char **dest, char *sep, int pos)
 char **construct_tab_from_ls(t_parse **ls)
 {
 	char	**cmd;
+	char	*tmp;
 	int		i;
 
+	// printf("ds contruct_tab\n");
 	cmd = malloc(sizeof(cmd) * (list_count(*ls) + 1));
 	if (!cmd)
 		return NULL;
 	i = -1;
 	while (*ls && (((*ls)->typ & CMDEND) != CMDEND))
+	{
+		// printf("cont : %s, typ : %d\n", (*ls)->cont, (*ls)->typ);
 		if ((*ls)->prev && (((*ls)->prev->typ & STICKY_A) == STICKY_A))
 		{
+			tmp = cmd[i];
 			cmd[i] = ft_strjoin(cmd[i], (*ls)->cont);
-			free((*ls)->cont);
-			(*ls)->cont = cmd[i];
+			free(tmp);
 			*ls = (*ls)->next;
 		}
 		else
 		{
-			cmd[++i] = (*ls)->cont;
+			cmd[++i] = ft_strdup((*ls)->cont);
 			*ls = (*ls)->next;
 		}
+	}
 	if (*ls && (((*ls)->typ & CMDEND) == CMDEND))
+	{
+		// printf("cont : %s\n", (*ls)->cont);
 		*ls = list_elem_remove(*ls);
+	}
 	cmd[++i] = NULL;
 	return (cmd);
 }

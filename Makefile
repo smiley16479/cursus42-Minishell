@@ -27,6 +27,7 @@ SRC	=	main.c \
 		support/toolbox2.c\
 		support/toolbox3.c\
 		support/toolbox4.c\
+		support/toolbox5.c\
 		setup/prompt.c\
 		setup/env_pwd.c\
 		setup/signal.c\
