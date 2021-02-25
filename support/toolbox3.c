@@ -3,77 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2021/02/24 17:03:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 19:11:46 by adtheus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
-
-/* int		is_token(int c)
-{
-	char	*token;
-	int		i;
-
-	i = 0;
-	token = " |><;";
-	while (++i && token[i])
-		if (c == token[i])
-			return (i);
-	return (0);
-}
-
-int		is_token(char **str)
-{
-	char	*token;
-	int		i;
-	int		trigger;
-
-	trigger = 0;
-	token = ">>\0|\0\0>\0\0<\0\0;\0\0";
-	while (**str && !(i = 0))
-		while (i < 14)
-		{
-			if (!ft_strncmp(&token[i], *str, ft_strlen(&token[i])))
-			{
-				*str += ft_strlen(&token[i]);
-				++trigger;
-				break ;
-			}
-			i += 3;
-		}
-	return (0);
-}
-
-int skip_space_n_is_token(char **cmdl)
-{
-	while (ft_isspace(**cmdl))
-		++*cmdl;
-	return (is_token(**cmdl));
-}
-
-int		is_two_token(char **cmdl)
-{
-	if (**cmdl == '>' && *((*cmdl) + 1) == '>')
-		*cmdl += 2;
-	else if (**cmdl == ';' && ++*cmdl)
-	{
-		while (ft_isspace(**cmdl))
-			++*cmdl;
-	}
-	if (is_token(**cmdl))
-	{
-		++*cmdl;
-		while (ft_isspace(**cmdl))
-			++*cmdl;
-		if (is_token(**cmdl) || **cmdl == '\0')
-			return (1);
-	}
-	return (0);
-} */
-
 
 int		is_token(char **cmdl)
 {
