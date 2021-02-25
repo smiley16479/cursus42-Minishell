@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2021/02/22 12:09:42 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/24 17:03:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int		is_two_token(char **cmdl)
 		++trigger;
 	while (ft_isspace(**cmdl))
 		++*cmdl;
-	if ((is_token(cmdl) && trigger) || **cmdl == '\0')
+	if ((is_token(cmdl) && trigger) || (**cmdl == '\0' && trigger))
 		return (1);
 	return (0);
 }

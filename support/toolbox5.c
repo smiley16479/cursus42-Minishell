@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox5.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:38:10 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/22 11:32:55 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/24 18:09:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	get_variable_outside_quote_list(char typ, char *tmp, int k, t_parse **ls)
 	int		m;
 
 	l = -1;
+	// printf("key : %s\n", tmp);
 	split_db = NULL;
 	while (g_envv[++l] && (db = ft_cut_export_var(g_envv[l], '=')))
 		if (!ft_strncmp(db[0], tmp, k))
@@ -52,7 +53,7 @@ void	get_variable_outside_quote_list(char typ, char *tmp, int k, t_parse **ls)
 			m = -1;
 			set_valid_chevron(ls, split_db);
 			while (split_db[++m])
-				*ls = t_parse_add(4, split_db[m], *ls);
+				*ls = t_parse_add(VAR_TYP, split_db[m], *ls);
 			(*ls)->typ += typ;
 			free(split_db);
 			return ;
@@ -71,12 +72,12 @@ int		get_allias_outside_quote_list(char **cmd, int *i, t_parse **ls)
 
 	typ = 0;
 	if (!(*cmd)[*i + 1]) // si $ est isolé on le garde tel quel
-		return (++*i, !(*ls = t_parse_add(4, ft_strdup(&(*cmd)[*i]), *ls)));
+		return (++*i, !(*ls = t_parse_add(0, ft_strdup(&(*cmd)[*i - 1]), *ls)));
 	ft_get_rid(cmd, *i);
 	if ((*cmd)[*i] == '?')
 	{
 		ft_get_rid(cmd, *i);
-		*ls = t_parse_add(4, ft_strdup((tmp = ft_itoa(g_status >> 8))), *ls);
+		*ls = t_parse_add(VAR_TYP, ft_strdup((tmp = ft_itoa(g_status >> 8))), *ls);
 		free(tmp);
 		return (0);
 	}

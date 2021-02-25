@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 21:45:33 by user42            #+#    #+#             */
-/*   Updated: 2021/02/22 11:50:39 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/23 17:48:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ enum	e_standar {in, out};
 
 # define SPQUOTE	0x01
 # define DBQUOTE	0x02
+# define FINAL_END	0x04
+# define VAR_TYP	0x08
 # define STICKY_A	0x10
 # define CMDEND		0x20
 # define BAD_CHEV	0x40
@@ -286,7 +288,7 @@ void			process_simple_quote(char **cmd, int *i, t_parse **elem);
 ** parsing/parsing_part3.c
 */
 
-int				process_redir_ls(t_parse *ls);
+int				process_redir_ls(t_parse **ls);
 
 /*
 ** parsing/parsing_part4.c
@@ -294,7 +296,7 @@ int				process_redir_ls(t_parse *ls);
 
 void			execution(char **cmd);
 
-void			execution_ls(t_parse *lst);
+void			execution_ls(t_parse **lst);
 
 void			loop_pipe(char **cmd, int *i_l_t_n);
 

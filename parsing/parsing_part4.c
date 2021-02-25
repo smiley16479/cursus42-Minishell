@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 09:35:07 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/22 11:52:13 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/24 16:07:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 
 int		pipe_followed_ls(t_parse *ls)
 {
-	while (ls)
+	while (ls && !(ls->typ & FINAL_END))
 		if (*ls->cont == '|' && (ls->typ & 0x0F) == 0)
 			break ;
 		else
 			ls = ls->next;
-	if (ls && *ls->cont == '|' && (ls->typ & 0x0F) == 0)
+	if (ls && !(ls->typ & FINAL_END) && *ls->cont == '|' && !(ls->typ & 0x0F))
 	{
 		ls->typ += CMDEND;
 		// printf("ds pipe cont1 : %s, typ ->%d\n", ls->cont, ls->typ);
@@ -44,8 +44,9 @@ void	simple_cmd_ls(t_parse **ls)
 
 	// printf("ds simple cmd\n");
 	// list_read(*ls);
-	if (process_redir_ls(*ls))
-		while ((*ls) && ((*ls)->typ & CMDEND) != CMDEND)
+	// process_redir_ls(ls);
+	if (process_redir_ls(ls)) //si redir ambigue on saute les autres instructions
+		while ((*ls) && !((*ls)->typ & CMDEND))
 			(*ls) = (*ls)->next;
 	cmd = construct_tab_from_ls(ls);
 	// for (size_t i = 0; cmd[i]; i++)
@@ -70,14 +71,16 @@ void	simple_cmd_ls(t_parse **ls)
 **	[1] = si la commande est pipée ou non, [2] = le PID du child actuel
 */
 
-void	execution_ls(t_parse *ls)
+void	execution_ls(t_parse **ls)
 {
 	int		i_l_t_n[3];
 
-	if (!(i_l_t_n[1] = pipe_followed_ls(ls)))
-		simple_cmd_ls(&ls);
+	if (!(i_l_t_n[1] = pipe_followed_ls(*ls)))
+		simple_cmd_ls(ls);
 	else
-		loop_pipe_ls(&ls, i_l_t_n);
+		loop_pipe_ls(ls, i_l_t_n);
+	// printf("ds exec : %p\n", *ls);
+	list_destroy(*ls);
 }
 
 /*
@@ -132,12 +135,12 @@ void	loop_pipe_ls(t_parse **ls, int *i_l_t_n)
 	exec = NULL;
 	i_l_t_n[0] = 0;
 	// printf("loop_pipe,cmd\n");
-	while (*ls)
+	while (*ls && !((*ls)->typ & FINAL_END))
 	{
 		// printf("ds loop_pipe cont : %s, typ ->%d\n", (*ls)->cont, (*ls)->typ);
 		pipe(p);
-		if (process_redir_ls(*ls))
-			while ((*ls) && ((*ls)->typ & CMDEND) != CMDEND)
+		if (process_redir_ls(ls)) //si redir ambigue on saute les autres instructions
+			while ((*ls) && !((*ls)->typ & CMDEND))
 				(*ls) = (*ls)->next;
 		loop_pipe_ls_suite(ls, p, i_l_t_n, exec);
 	}

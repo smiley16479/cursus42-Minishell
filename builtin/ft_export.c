@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:33:59 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 23:24:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 11:59:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_export_error(char *command, char **var)
 	int	i;
 
 	i = -1;
-	if (!*var || *command == '=')
+	if (!*command || !*var || *command == '=')
 	{
 		return ((g_status |= (!ft_error("export", command,
 		"not a valid identifier", STAY) << 8)));

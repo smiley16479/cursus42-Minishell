@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:41 by alexandre         #+#    #+#             */
-/*   Updated: 2021/02/20 16:54:56 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/23 22:11:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,15 @@ char **construct_tab_from_ls(t_parse **ls)
 	char	*tmp;
 	int		i;
 
-	// printf("ds contruct_tab\n");
+	// printf("(*ls)->cont : %s\n", (*ls)->cont);
+	// printf("ds contruct_tab list_count : %d\n", list_count(*ls));
 	cmd = malloc(sizeof(cmd) * (list_count(*ls) + 1));
 	if (!cmd)
 		return NULL;
 	i = -1;
-	while (*ls && (((*ls)->typ & CMDEND) != CMDEND))
+	// printf("cont : %s, typ : %d\n", (*ls)->cont, (*ls)->typ);
+	while (*ls && !((*ls)->typ & CMDEND) && !((*ls)->typ & FINAL_END))
 	{
-		// printf("cont : %s, typ : %d\n", (*ls)->cont, (*ls)->typ);
 		if ((*ls)->prev && (((*ls)->prev->typ & STICKY_A) == STICKY_A))
 		{
 			tmp = cmd[i];
@@ -136,6 +137,7 @@ char **construct_tab_from_ls(t_parse **ls)
 		}
 		else
 		{
+			// printf("(*ls)->cont : %s\n", (*ls)->cont);
 			cmd[++i] = ft_strdup((*ls)->cont);
 			*ls = (*ls)->next;
 		}

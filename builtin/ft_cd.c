@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:34:18 by alexandre         #+#    #+#             */
-/*   Updated: 2020/11/21 17:49:03 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 12:03:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ int		ft_cd(char *path)
 		return (!ft_error("minishell", "cd", "HOME not set", STAY));
 	}
 	if ((g_status = !(!(chdir(path)))))
-		return (!(ft_error("cd", strerror(errno), path, STAY)));
+	{	printf("[%d]\n", g_status);
+			return (!(ft_error("cd", strerror(errno), path, STAY)));}
 	else
 		ft_cd_exp(path, i);
 	return (0);

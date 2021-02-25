@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/13 03:56:24 by user42            #+#    #+#             */
-/*   Updated: 2021/02/21 20:37:11 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 11:44:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,14 @@ t_parse	*parse_cmd(char **cmd)
 				process_db_quote(&cmd[i], &j, &parse);
 			else if (ft_isprint(cmd[i][j]) && !check_set(cmd[i][j], "\'\"$")) //surement d'autre char à ajouter ?
 				get_str(&cmd[i], &j, &parse);
-			else if (cmd[i][j] == '$' /* && cmd[i][j + 1]
-				&& !check_set(cmd[i][j + 1], " \"\'") */)
+			else if (cmd[i][j] == '$' /* && cmd[i][j + 1] */
+				&& !check_set(cmd[i][j + 1], " \"\'"))
 				get_allias_outside_quote_list(&cmd[i], &j, &parse);
 			else
 				++j;
 		++i;
 	}
+	parse = t_parse_add(FINAL_END, NULL, parse);
 	// list_read(parse);
 	return (parse);
 }

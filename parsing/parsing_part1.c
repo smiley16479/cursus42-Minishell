@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_part1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2021/02/22 11:56:42 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/23 15:10:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ int		process_cmd(char **cmd)
 	// return (0);
 	 */
 	
-	execution_ls(parse);
-	list_destroy(parse);
+	execution_ls(&parse);
+	// list_destroy(parse);
 	// free(cmd);
 	ft_free_split(cmd);
 	return (0);
