@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 12:31:04 by aschwere          #+#    #+#             */
-/*   Updated: 2020/11/23 17:17:10 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 19:23:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
+
 extern int g_cant_quit;
 
 char	*readline(char *str, int fd)

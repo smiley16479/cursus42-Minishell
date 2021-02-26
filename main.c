@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 01:07:09 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/22 11:57:50 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 21:03:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ int	main(int ac, char **av, char **env)
 		free(cmdl);
 	}
 	free(cmdl);
-	return (/* ft_eof() */0);
+	return (ft_eof());
 }

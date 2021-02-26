@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:36:41 by alexandre         #+#    #+#             */
-/*   Updated: 2021/02/23 22:11:44 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 20:18:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,45 +87,14 @@ void	ft_add_inside(char **dest, char *sep, int pos)
 	*dest = tmp;
 }
 
-/*
-** Construit un char **tab depuis une list(->cont)
-*/
-
-/* char **construct_tab_from_ls(t_parse **ls)
-{
-	char	**cmd;
-	int		i;
-
-	cmd = malloc(sizeof(cmd) * (list_count(*ls) + 1));
-	if (!cmd)
-		return NULL;
-	i = -1;
-	while (*ls && (((*ls)->typ & CMDEND) != CMDEND))
-	{
-		cmd[++i] = (*ls)->cont;
-		*ls = (*ls)->next;
-	}
-	if (*ls && (((*ls)->typ & CMDEND) == CMDEND))
-		*ls = list_elem_remove(*ls);
-	cmd[++i] = NULL;
-	return (cmd);
-}
- */
-
-
-char **construct_tab_from_ls(t_parse **ls)
+char	**construct_tab_from_ls(t_parse **ls, int i)
 {
 	char	**cmd;
 	char	*tmp;
-	int		i;
 
-	// printf("(*ls)->cont : %s\n", (*ls)->cont);
-	// printf("ds contruct_tab list_count : %d\n", list_count(*ls));
 	cmd = malloc(sizeof(cmd) * (list_count(*ls) + 1));
 	if (!cmd)
-		return NULL;
-	i = -1;
-	// printf("cont : %s, typ : %d\n", (*ls)->cont, (*ls)->typ);
+		return (NULL);
 	while (*ls && !((*ls)->typ & CMDEND) && !((*ls)->typ & FINAL_END))
 	{
 		if ((*ls)->prev && (((*ls)->prev->typ & STICKY_A) == STICKY_A))
@@ -137,17 +106,12 @@ char **construct_tab_from_ls(t_parse **ls)
 		}
 		else
 		{
-			// printf("(*ls)->cont : %s\n", (*ls)->cont);
 			cmd[++i] = ft_strdup((*ls)->cont);
 			*ls = (*ls)->next;
 		}
 	}
 	if (*ls && (((*ls)->typ & CMDEND) == CMDEND))
-	{
-		// printf("cont : %s\n", (*ls)->cont);
 		*ls = list_elem_remove(*ls);
-	}
 	cmd[++i] = NULL;
 	return (cmd);
 }
-

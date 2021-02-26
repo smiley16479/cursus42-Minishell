@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 17:35:01 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/24 16:44:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 19:44:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,41 @@ t_parse	*backward_chevron_ls(t_parse *ls)
 	return (list_elem_remove(ls));
 }
 
+void	process_redir_ls_suite(t_parse **list, t_parse **ls, int redir_type)
+{
+	if (redir_type == 1 || redir_type == 2)
+	{
+		if ((*ls)->prev == NULL)
+		{
+			*list = chevron_simple_et_db_ls((*ls), redir_type);
+			(*ls) = *list;
+		}
+		else
+			(*ls) = chevron_simple_et_db_ls((*ls), redir_type);
+	}
+	else if (redir_type == 3)
+	{
+		if ((*ls)->prev == NULL)
+		{
+			*list = backward_chevron_ls((*ls));
+			(*ls) = *list;
+		}
+		else
+			(*ls) = backward_chevron_ls((*ls));
+	}
+	else
+		(*ls) = (*ls)->next;
+}
+
 int		process_redir_ls(t_parse **list)
 {
-	int	redir_type;
-	t_parse *ls;
+	int		redir_type;
+	t_parse	*ls;
 
-	ls = *list; 
-	// list_read(*list);
-	// printf("hello\n");
+	ls = *list;
 	while (ls && (ls->typ & CMDEND) != CMDEND)
 	{
-		if ((redir_type = which_redir(ls->cont))) 
+		if ((redir_type = which_redir(ls->cont)))
 		{
 			if (ls->prev == NULL)
 			{
@@ -62,37 +86,11 @@ int		process_redir_ls(t_parse **list)
 		}
 		if ((ls->typ & BAD_CHEV) == BAD_CHEV)
 		{
-			write (2, "bash : ambiguous redirection\n", 30);
+			write(2, "bash : ambiguous redirection\n", 30);
 			g_status = 1 << 8;
 			return (1);
 		}
-		if (redir_type == 1 || redir_type == 2)
-		{
-			if (ls->prev == NULL)
-			{
-				*list = chevron_simple_et_db_ls(ls, redir_type);
-				ls = *list;
-			}
-			else
-				ls = chevron_simple_et_db_ls(ls, redir_type);
-		}
-			// ls = chevron_simple_et_db_ls(ls, redir_type);
-		else if (redir_type == 3)
-		{
-			if (ls->prev == NULL)
-			{
-				*list = backward_chevron_ls(ls);
-				ls = *list;
-			}
-			else
-				ls = backward_chevron_ls(ls);
-		}
-			// ls = backward_chevron_ls(ls);
-		else
-			ls = ls->next;
+		process_redir_ls_suite(list, &ls, redir_type);
 	}
-	// list_read(*list);
-	// printf("hello\n");
-	// printf("ptr_ls[%p], ptr_list[%p]\n", ls, *list);
 	return (0);
 }

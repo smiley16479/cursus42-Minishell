@@ -6,35 +6,19 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:38:10 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/24 18:09:22 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 21:01:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include.h"
-
-void	set_valid_chevron(t_parse **ls, char	**split_db)
-{
-	int len;
-
-	if ((len = ft_strlen_vec(split_db)) == 0 ||  len > 1)
-		if ((*ls) &&
-		(!ft_strcmp((*ls)->cont, ">") ||
-		!ft_strcmp((*ls)->cont, ">>") ||
-		!ft_strcmp((*ls)->cont, "<")) &&
-		((*ls)->typ & 0x0F) == 0)
-		{
-			// printf("cont : %s, %d\n",(*ls)->prev->cont, len);
-			(*ls)->prev->typ += BAD_CHEV;
-		}
-}
-
 
 /*
 ** return **char pour une variable qui possède des espaces
 ** add : k est la taille de la variable
 */
 
-void	get_variable_outside_quote_list(char typ, char *tmp, int k, t_parse **ls)
+void	get_variable_outside_quote_list(char typ,
+		char *tmp, int k, t_parse **ls)
 {
 	char	**db;
 	char	**split_db;
@@ -42,7 +26,6 @@ void	get_variable_outside_quote_list(char typ, char *tmp, int k, t_parse **ls)
 	int		m;
 
 	l = -1;
-	// printf("key : %s\n", tmp);
 	split_db = NULL;
 	while (g_envv[++l] && (db = ft_cut_export_var(g_envv[l], '=')))
 		if (!ft_strncmp(db[0], tmp, k))
@@ -70,14 +53,14 @@ int		get_allias_outside_quote_list(char **cmd, int *i, t_parse **ls)
 	char	typ;
 	int		k;
 
-	typ = 0;
-	if (!(*cmd)[*i + 1]) // si $ est isolé on le garde tel quel
-		return (++*i, !(*ls = t_parse_add(0, ft_strdup(&(*cmd)[*i - 1]), *ls)));
+	if (!(*cmd)[*i + 1] && ++*i)
+		return (!(*ls = t_parse_add(0, ft_strdup(&(*cmd)[*i - 1]), *ls)));
 	ft_get_rid(cmd, *i);
 	if ((*cmd)[*i] == '?')
 	{
 		ft_get_rid(cmd, *i);
-		*ls = t_parse_add(VAR_TYP, ft_strdup((tmp = ft_itoa(g_status >> 8))), *ls);
+		*ls = t_parse_add(VAR_TYP,
+		ft_strdup((tmp = ft_itoa(g_status >> 8))), *ls);
 		free(tmp);
 		return (0);
 	}
@@ -87,13 +70,12 @@ int		get_allias_outside_quote_list(char **cmd, int *i, t_parse **ls)
 		++k;
 	tmp[k] = '\0';
 	*i += k;
-	if ((*cmd)[*i] && (*cmd)[*i] != ' ')
-		typ = STICKY_A;
+	typ = ((*cmd)[*i] && (*cmd)[*i] != ' ') ? STICKY_A : 0;
 	get_variable_outside_quote_list(typ, tmp, k, ls);
-	return (1);
+	return (0);
 }
 
-/* 
+/*
 ** Get the string or a portion of it if text embed quote
 */
 
@@ -110,12 +92,12 @@ void	get_str(char **cmd, int *i, t_parse **parse)
 			ft_get_rid(cmd, *i);
 			++*i;
 		}
-		else if (check_set((*cmd)[*i], "\'\"$")) //surement les mauvais char
+		else if (check_set((*cmd)[*i], "\'\"$"))
 			break ;
 		else
 			++*i;
-	if ((*cmd)[*i]/*  && !check_set((*cmd)[*i], " \'\"\\$") */)
-		typ |= STICKY_A; 
+	if ((*cmd)[*i])
+		typ |= STICKY_A;
 	*parse = t_parse_add(typ, ft_substr(*cmd, tmp, *i - tmp), *parse);
 }
 
@@ -156,7 +138,7 @@ int		get_allias(char **cmd, int *i)
 	char	*tmp;
 	int		j;
 
-	if ((*cmd)[*i + 1]  && (*cmd)[*i + 1] == ' ')
+	if ((*cmd)[*i + 1] && (*cmd)[*i + 1] == ' ')
 		return (++*i);
 	ft_get_rid(cmd, *i);
 	if ((*cmd)[*i] == '?')

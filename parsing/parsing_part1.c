@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 21:59:49 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 15:10:47 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 16:31:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		get_new_cmdl(char **cmdl)
 	int gnl_ret;
 
 	signal_set_up(ft_handle_signal);
-	// ft_prompt();
+	ft_prompt();
 	if ((gnl_ret = get_next_line(STDIN_FILENO, cmdl)) > 0)
 		if (verify_duplicate_token_in_cmdl(*cmdl))
 		{
@@ -99,7 +99,8 @@ char	***parse_cmdl(char *cmdl)
 	i = -1;
 	while (cmds[++i])
 	{
-		if ((std[in] = dup(0)) < 0 || 0 > (std[out] = dup(1)))
+		if ((std[in] = dup(0)) < 0 ||
+		0 > (std[out] = dup(1)))
 			ft_error("dup", "fd duplication failed", "dup", STAY);
 		process_cmd(cmds[i] = split_redir(cmds[i]));
 		if (dup2(std[in], 0) < 0 || 0 > dup2(std[out], 1))
@@ -118,27 +119,11 @@ char	***parse_cmdl(char *cmdl)
 int		process_cmd(char **cmd)
 {
 	t_parse *parse;
-	
-	(void) parse;
-	// for (int i = 0; cmd[i]; ++i)
-	// 	printf("cmd:[%s]\n", cmd[i]);
+
+	(void)parse;
 	parse = parse_cmd(cmd);
 	list_rewind(&parse);
-
-/* // Pour ne pas avoir de leak à cause du return prématuré qui empêche execution() de free cmd
-	char **tmp = cmd;
-	while (*cmd)
-	{
-		// printf("process_cmd : %s\n", *cmd);
-		free(*cmd++);
-	}
-	free(tmp);
-	// return (0);
-	 */
-	
 	execution_ls(&parse);
-	// list_destroy(parse);
-	// free(cmd);
 	ft_free_split(cmd);
 	return (0);
 }

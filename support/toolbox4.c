@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 14:57:28 by adtheus           #+#    #+#             */
-/*   Updated: 2021/02/23 22:12:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 20:10:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_parse	*t_parse_add(char typ, char *cont, t_parse *prev)
 	return (to_return);
 }
 
-/* 
+/*
 ** retourne à la tête de la chaine
 */
 
@@ -49,14 +49,10 @@ void	list_rewind(t_parse **elem)
 void	list_destroy(t_parse *to_destroy)
 {
 	t_parse *tmp;
-	// printf("ds destroy %p\n", to_destroy);
-	// if (to_destroy)
-	// 	printf("[ds destroy] cont : XX, typ : %d\n", to_destroy->typ);
 
 	list_rewind(&to_destroy);
 	while (to_destroy)
 	{
-		// printf("to_destroy->cont: %s\n", to_destroy->cont);
 		tmp = to_destroy;
 		to_destroy = to_destroy->next;
 		free(tmp->cont);
@@ -64,10 +60,9 @@ void	list_destroy(t_parse *to_destroy)
 	}
 }
 
-t_parse *list_elem_remove(t_parse *elem)
+t_parse	*list_elem_remove(t_parse *elem)
 {
 	t_parse *tmp;
-	// list_read(elem);
 
 	if (elem->prev)
 	{
@@ -91,9 +86,6 @@ t_parse *list_elem_remove(t_parse *elem)
 	}
 	free(elem->cont);
 	free(elem);
-	// printf("tmp[%p]\n", tmp);
-	// list_read(tmp);
-	// printf("\n\n");
 	return (tmp);
 }
 
@@ -102,55 +94,7 @@ int		list_count(t_parse *to_count)
 	int i;
 
 	i = 0;
-	// list_read(to_count);
 	while (to_count && ((to_count->typ & CMDEND) != CMDEND) && ++i)
 		to_count = to_count->next;
 	return (i);
-}
-
-void	list_read(t_parse *to_read)
-{
-	list_rewind(&to_read);
-	while (to_read)
-	{
-		printf("%14p -> ", to_read->prev);
-		printf("%14p -> ", to_read);
-		printf("%14p, ", to_read->next);
-		printf("lst_read->typ ");
-		if ((to_read->typ & STICKY_B) == STICKY_B)
-			printf("STICKY_B ");
-		if ((to_read->typ & STICKY_A) == STICKY_A)
-			printf("STICKY_A ");
-		if ((to_read->typ & SPQUOTE) == SPQUOTE)
-			printf("SPQUOTE ");
-		if ((to_read->typ & DBQUOTE) == DBQUOTE)
-			printf("DBQUOTE ");
-		if ((to_read->typ & CMDEND) == CMDEND)
-			printf("CMDEND ");
-		if ((to_read->typ & FINAL_END) == FINAL_END)
-			printf("FINAL_END ");
-		printf(", cont : %s\n" , to_read->cont);
-		to_read = to_read->next;
-	}
-}
-
-/* 
-** Cherche si un des charactères de première chaine est ds l'autre
-*/
-
-int		ft_chr_char_of_str1_in_str2(char *str1, char *str2)
-{
-	int i;
-
-	while (*str2 && !(i = 0))
-	{
-		while (str1[i])
-		{
-			if (str1[i] == *str2)
-				return (1);
-			++i;
-		}
-		++str2;
-	}
-	return (0);
 }

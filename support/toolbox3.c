@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   toolbox3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 00:42:28 by adrien            #+#    #+#             */
-/*   Updated: 2021/02/25 19:11:46 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 20:48:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		is_token(char **cmdl)
 
 int		is_two_token(char **cmdl)
 {
-	int trigger;
+	int	trigger;
 
 	trigger = 0;
 	while (ft_isspace(**cmdl))
@@ -46,7 +46,6 @@ int		is_two_token(char **cmdl)
 		return (1);
 	return (0);
 }
-
 
 int		skip_quote_n_text(char **cmdl, int *text)
 {
@@ -89,7 +88,7 @@ int		verify_duplicate_token_in_cmdl(char *cmdl)
 	return (0);
 }
 
-int	ft_error(char *proc, char *mess, char *command, int out)
+int		ft_error(char *proc, char *mess, char *command, int out)
 {
 	write(2, "\e[0;31m", 7);
 	write(2, proc, ft_strlen(proc));

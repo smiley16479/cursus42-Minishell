@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:33:59 by alexandre         #+#    #+#             */
-/*   Updated: 2021/02/25 11:59:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 19:05:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ int	ft_export_error_sub1(char *command, char **var)
 
 	i = -1;
 	while (command[++i])
-		if (!ft_isalnum(command[i]) && command[i] != '=' && command[i] != '/'
-		&& command[i] != '_' && command[i] != '-' && command[i] != '.'
-		&& command[i] != '~' && command[i] != ' ' && command[i] != '\\'
-		&& command[i] != '$')
+		if (!ft_isalnum(command[i]) && !check_set(command[i], "\\_-.:~ /$="))
 		{
 			return ((g_status |= (!ft_error("export",
 			"not valid in this context", command, STAY) << 8)));
@@ -69,7 +66,7 @@ int	ft_export_error(char *command, char **var)
 		"not a valid identifier", STAY) << 8)));
 	}
 	while (var[0][++i])
-		if ((!(ft_isalnum(var[0][i])) && var[0][i] != '/' && var[0][i] != '_')
+		if ((!ft_isalnum(var[0][i]) && !check_set(var[0][i], "/_"))
 			|| **var == '=' || **var == ' ' || **var == '\0')
 		{
 			return ((g_status |= (!ft_error("export", command,

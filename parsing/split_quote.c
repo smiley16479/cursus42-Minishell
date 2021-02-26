@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:34:30 by alexandre         #+#    #+#             */
-/*   Updated: 2021/02/05 18:49:26 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 19:57:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,6 @@ int		ft_len_split_unless_quote(char *line, char *sep)
 			i++;
 	}
 	return (len);
-}
-
-/*
-**Copie i caractères à partir du prev-ième caractère de line dans dest
-*/
-
-char	*copy_word(char *line, int prev, int i)
-{
-	char	*dest;
-
-	if (prev == i)
-		return (NULL);
-	dest = malloc(i - prev + 1);
-	ft_strlcpy(dest, line + prev, i - prev + 1);
-	return (dest);
 }
 
 void	ft_extract_sep_quote_norm(char *command, int *quot, int i)
@@ -106,13 +91,12 @@ int		change_alias_if_not_in_quote(char **command)
 	{
 		ft_extract_sep_quote_norm(*command, quot, i);
 		if ((*command)[i] == '$' && !(quot[0] + quot[1]) &&
-		!check_set((*command)[i + 1], "\0\"\'") /* (*command)[i + 1]
-		!= '\0' && (*command)[i + 1] != '\"' && (*command)[i + 1] != '\'' */)
+		!check_set((*command)[i + 1], "\"\'\0"))
 		{
 			get_allias(command, &i);
 			triger = 1;
 		}
-		if  ((*command)[i])
+		if ((*command)[i])
 			++i;
 	}
 	return (triger);

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 21:45:33 by user42            #+#    #+#             */
-/*   Updated: 2021/02/23 17:48:58 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/25 21:01:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,9 @@
 # include "get_next_line.h"
 # include <stdio.h>
 
-enum	e_standar {in, out};
+enum			e_standar {in, out};
 
 /*
-** Copie de minishell.h
-*/
-
-/* 
 ** typ & 0x01	-> sp_quote
 ** typ & 0x02	-> db_quote
 ** typ & 0x10	-> acollé à la prochaine portion de texte
@@ -46,13 +42,13 @@ enum	e_standar {in, out};
 # define BAD_CHEV	0x40
 # define STICKY_B	0x80
 
-typedef struct s_parse {
-char			typ;
-char			*cont;
-
-struct s_parse	*prev;
-struct s_parse	*next;
-}	t_parse;
+typedef struct	s_parse
+{
+	char			typ;
+	char			*cont;
+	struct s_parse	*prev;
+	struct s_parse	*next;
+}				t_parse;
 
 # define EXIT 10
 # define STAY 11
@@ -203,8 +199,6 @@ void			ft_status_handler(void);
 
 int				ft_len_split_unless_quote(char *line, char *set);
 
-char			*copy_word(char *line, int prev, int i);
-
 char			**ft_extract_sep_quote(char **dest, char *command, char *sep);
 
 char			**ft_split_unless_quote(char *line, char *sep);
@@ -231,7 +225,7 @@ void			ft_get_rid(char **src, int pos);
 
 void			ft_add_inside(char **dest, char *sep, int pos);
 
-char			**construct_tab_from_ls(t_parse **ls);
+char			**construct_tab_from_ls(t_parse **ls, int i);
 
 /*
 **toolbox2.c
@@ -241,7 +235,8 @@ int				ft_free_split(char **commands);
 
 int				ft_strlen_vec(char **vec);
 
-void			ft_add_vec_to_another(int *pos, char **to_add, char ***cmd, int join);
+void			ft_add_vec_to_another
+				(int *pos, char **to_add, char ***cmd, int join);
 
 void			ft_add_cmd(int pos, char *to_add, char ***cmd);
 /*
@@ -250,15 +245,11 @@ void			ft_add_cmd(int pos, char *to_add, char ***cmd);
 
 int				is_redir(char *str);
 
-t_bool			which_redir(char *str);
-
 int				get_rid_cmd(char **cmd, int beg, int end);
 
 /*
 *** toolbox4.c
 */
-
-int				ft_chr_char_of_str1_in_str2(char *str1, char *str2);
 
 int				ft_is_char_in_str(char c, char *str1);
 
@@ -320,12 +311,12 @@ t_parse			*list_elem_remove(t_parse *elem);
 
 void			list_read(t_parse *to_read);
 
-
-/* 
+/*
 ** toolbox5.c
 */
 
-void			get_variable_outside_quote_list(char typ, char *tmp, int k, t_parse **ls);
+void			get_variable_outside_quote_list
+				(char typ, char *tmp, int k, t_parse **ls);
 
 int				get_allias_outside_quote_list(char **cmd, int *i, t_parse **ls);
 
@@ -335,5 +326,14 @@ int				get_variable(char **cmd, char *tmp, int *i, int j);
 
 int				get_allias(char **cmd, int *i);
 
+/*
+*** toolbox6.c
+*/
+
+t_bool			which_redir(char *str);
+
+char			*copy_word(char *line, int prev, int i);
+
+void			set_valid_chevron(t_parse **ls, char **split_db);
 
 #endif

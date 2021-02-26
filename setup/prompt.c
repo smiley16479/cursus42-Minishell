@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adtheus <adtheus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/29 10:35:41 by alexandre         #+#    #+#             */
-/*   Updated: 2020/12/04 15:54:49 by adtheus          ###   ########.fr       */
+/*   Updated: 2021/02/25 21:22:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 void	ft_prompt_suite(int j, char *home, char *pwd)
 {
-(void)j;
-	write(1, "\e[32;40m", 8); // <-- c'est la couleur qui fait bugger le prompt
+	(void)j;
+	write(1, "\e[32;40m", 8);
 	if (!(pwd = getcwd(pwd, 0)))
 		pwd = find_key("PWD");
 	if ((j == 0) && (home = malloc(sizeof(char))))
 		home[0] = '\0';
 	else
 		write(1, "~", 1);
-	// write(1, &pwd[ft_strlen(home)], ft_strlen(pwd) - ft_strlen(home));
+	write(1, &pwd[ft_strlen(home)], ft_strlen(pwd) - ft_strlen(home));
 	write(1, pwd, ft_strlen(pwd));
-	write(1, "\e[0m", 4); // <-- la couleur fait bugger le prompt (les deux: set et reset)
+	write(1, "\e[0m", 4);
 	free(pwd);
 	free(home);
 	ft_putstr_fd("$ ", 1);
 }
 
-void	ft_prompt(void)
+void	ft_prompt1(void)
 {
 	char	**var;
 	char	*pwd;
@@ -49,4 +49,9 @@ void	ft_prompt(void)
 		ft_free_split(var);
 	}
 	ft_prompt_suite(j, home, pwd);
+}
+
+void	ft_prompt(void)
+{
+	write(1, "cmd_line_$ ", 11);
 }
