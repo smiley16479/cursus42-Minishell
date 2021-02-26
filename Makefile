@@ -5,7 +5,7 @@ HEADER	=	$(addprefix -I, libft/Includes)
 
 CFLAGS	=	-Wall -Werror -Wextra 
 
-SANITIZ	=	-g3 -fsanitize=address -fno-omit-frame-pointer 
+SANITIZ	=	#-g3 -fsanitize=address -fno-omit-frame-pointer 
 
 CC		=	gcc
 
@@ -32,7 +32,6 @@ SRC	=	main.c \
 		setup/prompt.c\
 		setup/env_pwd.c\
 		setup/signal.c\
-
 
 OBJ = $(SRC:%.c=%.o)
 
